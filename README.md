@@ -1,28 +1,34 @@
 # Prestia · Simulador de préstamos
 
-Frontend público desarrollado con Angular 22. Esta estructura inicial no incluye todavía pantallas de funcionalidades; las rutas y la navegación se ampliarán al incorporar los módulos.
+Frontend público desarrollado con Angular 22. No requiere inicio de sesión.
 
 ## Desarrollo
 
-Requiere Node.js y npm. Para iniciar la aplicación con la configuración de desarrollo y mocks:
+Requiere Node.js y npm. Instala las dependencias y levanta la aplicación en `http://localhost:4200`:
 
 ```sh
 npm install
 npm start
 ```
 
-La aplicación estará disponible en `http://localhost:4200`. Para conectarla al backend local, inicia primero su API y el emulador de Firestore y ejecuta:
+`npm start` usa los datos de ejemplo de la configuración de desarrollo. Para consultar el backend local, inicia primero su API en el puerto `8080` y ejecuta:
 
 ```sh
 npm run start:backend
 ```
 
-La configuración `backend` utiliza el proxy de `/api` hacia `http://localhost:8080`. `npm run build` genera la versión de producción con `environment.production.ts`: desactiva los mocks y consume `/api` en el mismo origen donde se despliegue el frontend.
+El proxy de desarrollo envía las peticiones `/api` al backend en `http://localhost:8080`. La API utiliza Firestore; para trabajar con datos persistidos, inicia antes el emulador del proyecto `demo-app` en `127.0.0.1:8085` y carga sus datos de ejemplo siguiendo el README de la base de datos. El origen del frontend para CORS es `http://localhost:4200`, configurado en el backend mediante `FRONT_URL`.
+
+## Compilación
+
+```sh
+npm run build
+```
+
+La compilación de producción usa siempre el backend, sin mocks, mediante la configuración fija `environment.production.ts`. En producción, sirve el frontend con la API disponible bajo `/api` en el mismo origen.
 
 ## Módulos
 
-Todavía no se han incorporado módulos de funcionalidades.
+- **Simulador y solicitud de préstamos** (`/loan-applications`): landing con simulador y solicitud en pasos que muestra las ofertas. Consume `POST /api/loan-applications` y `GET /api/loan-applications/:id/offers`.
 
-## Conexión con las otras capas
-
-El frontend se ejecuta en el puerto `4200` y consume la API pública del backend bajo `/api`, sin inicio de sesión. En desarrollo, el proxy envía esas peticiones al backend del puerto `8080`; configura allí `FRONT_URL=http://localhost:4200` para permitir este origen. El backend se conecta al emulador de Firestore mediante `FIREBASE_PROJECT_ID=demo-app` y `FIRESTORE_EMULATOR_HOST=127.0.0.1:8085`. El frontend no accede directamente a la base de datos.
+El frontend no se conecta directamente a Firestore: todas las solicitudes de datos pasan por el backend.

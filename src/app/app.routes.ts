@@ -1,10 +1,10 @@
-import type { Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 
 export const routes: Routes = [
+  { path: '', pathMatch: 'full', redirectTo: 'loan-applications' },
   {
-    path: '',
-    pathMatch: 'full',
-    loadComponent: () => import('./home-page').then(m => m.HomePage)
+    path: 'loan-applications',
+    loadChildren: () => import('./features/loan-applications/loan-applications.routes').then(m => m.LOAN_APPLICATIONS_ROUTES),
   },
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' },
 ];
