@@ -103,7 +103,7 @@ export class LoanRequestPage {
     const control = this.form.controls[field];
     if (!control.touched) return '';
     if (field === 'birthDate' && control.value) {
-      const value = control.value;
+      const value = this.form.controls.birthDate.value;
       const date = new Date(`${value}T00:00:00Z`);
       const now = new Date();
       const age = now.getUTCFullYear() - date.getUTCFullYear() - (now.getUTCMonth() < date.getUTCMonth() || (now.getUTCMonth() === date.getUTCMonth() && now.getUTCDate() < date.getUTCDate()) ? 1 : 0);

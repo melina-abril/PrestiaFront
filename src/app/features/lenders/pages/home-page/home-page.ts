@@ -3,14 +3,10 @@ import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signa
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { switchMap } from 'rxjs';
-import { LoadState } from '../../../../shared/models/load-state';
-import { Page } from '../../../../shared/models/page';
-import { toLoadState } from '../../../../shared/utils/to-load-state';
 import { LenderCard } from '../../components/lender-card';
 import { LendersService } from '../../data-access/lenders.service';
 import { LoanSimulationService } from '../../../loan-requests/data-access/loan-simulation.service';
 import { calculateLoan } from '../../../loan-requests/models/loan-calculation';
-import { LenderResponse } from '../../models/lenders.models';
 
 const FAQ = [
   { question: '¿Credara concede préstamos?', answer: 'No. Comparamos ofertas de entidades reguladas; el préstamo lo concede la entidad que elijas.' },
@@ -51,7 +47,7 @@ export class HomePage {
   private readonly featuredRequest = signal(0);
   protected readonly featuredState = toSignal(
     toObservable(this.featuredRequest).pipe(switchMap(() => this.lenders.listLenders({ featured: true }))),
-    { initialValue: null as Page<LenderResponse> | null },
+    { initialValue: null },
   );
   protected readonly openQuestions = signal<ReadonlySet<number>>(new Set([0]));
 
