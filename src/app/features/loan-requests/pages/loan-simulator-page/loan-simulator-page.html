@@ -1,0 +1,45 @@
+<nav class="breadcrumb" aria-label="Migas de pan"><a routerLink="/lenders">Inicio</a> › Herramientas › Simulador de préstamos</nav>
+<main>
+  <div class="simulator-layout">
+    <div class="simulator-intro">
+      <h1>Simulador de préstamos online</h1>
+      <p>Calcula intereses, TAE y total a devolver como cliente nuevo y como cliente recurrente.</p>
+      <div class="chips"><span>✓ Gratis</span><span>✓ Resultado inmediato</span><span>✓ Sin registro</span></div>
+      @if (calculation().savings > 0) {
+        <div class="saving">Como cliente nuevo te ahorras <strong>{{ calculation().savings | money:'EUR' }}</strong>.</div>
+      }
+      <section class="card breakdown" aria-labelledby="breakdown-title">
+        <h2 id="breakdown-title">Desglose del total</h2>
+        <div class="bar-row"><span>Cliente nuevo</span><div class="bar-track" role="img" [attr.aria-label]="'Cliente nuevo: ' + calculation().newCustomer.capitalPercent + '% capital y ' + (100 - calculation().newCustomer.capitalPercent) + '% intereses'"><span class="bar-capital" [style.width.%]="calculation().newCustomer.capitalPercent"></span><span class="bar-interest" [style.width.%]="100 - calculation().newCustomer.capitalPercent"></span></div></div>
+        <div class="bar-row"><span>Recurrente</span><div class="bar-track" role="img" [attr.aria-label]="'Recurrente: ' + calculation().returningCustomer.capitalPercent + '% capital y ' + (100 - calculation().returningCustomer.capitalPercent) + '% intereses'"><span class="bar-capital" [style.width.%]="calculation().returningCustomer.capitalPercent"></span><span class="bar-interest" [style.width.%]="100 - calculation().returningCustomer.capitalPercent"></span></div></div>
+        <div class="legend"><span><i class="capital-key"></i>Capital</span><span><i class="interest-key"></i>Intereses</span></div>
+      </section>
+    </div>
+    <section class="card simulator-card" id="calculadora" aria-labelledby="simulator-title">
+      <h2 id="simulator-title">Simulador avanzado</h2>
+      <p>Mueve los controles: el resultado se calcula al instante.</p>
+      <div class="range-heading"><label for="loan-amount">¿Cuánto necesitas?</label><strong>{{ amount() | money:'EUR' }}</strong></div>
+      <input id="loan-amount" type="range" min="50" max="2000" step="50" [value]="amount()" (input)="changeAmount($any($event.target).value)" />
+      <div class="range-ends"><span>50 €</span><span>2.000 €</span></div>
+      <div class="range-heading"><label for="loan-days">¿En cuántos días lo devuelves?</label><strong>{{ days() }} días</strong></div>
+      <input id="loan-days" type="range" min="7" max="90" step="1" [value]="days()" (input)="changeDays($any($event.target).value)" />
+      <div class="range-ends"><span>7 días</span><span>90 días</span></div>
+      <div class="result-grid">
+        <div class="result result--new"><h3>Cliente nuevo</h3><dl><dt>Intereses</dt><dd>{{ calculation().newCustomer.interest | money:'EUR' }}</dd><dt>TAE</dt><dd>{{ calculation().newCustomer.tae | number:'1.0-0' }} %</dd><dt>Total a devolver</dt><dd class="total">{{ calculation().newCustomer.total | money:'EUR' }}</dd></dl></div>
+        <div class="result"><h3>Cliente recurrente</h3><dl><dt>Intereses</dt><dd>{{ calculation().returningCustomer.interest | money:'EUR' }}</dd><dt>TAE</dt><dd>{{ calculation().returningCustomer.tae | number:'1.0-0' }} %</dd><dt>Total a devolver</dt><dd class="total">{{ calculation().returningCustomer.total | money:'EUR' }}</dd></dl></div>
+      </div>
+      <p class="repayment">Fecha de devolución: <strong>{{ calculation().repaymentDate | date:'dd/MM/yyyy' }}</strong></p>
+      <a class="button primary-link" routerLink="/loan-requests" (click)="saveSelection()">Encontrar mi préstamo</a>
+      <p class="legal-note">* Clientes nuevos: 0 % de interés los primeros 30 días. Desde el día 31, 1 % diario sobre el importe. Simulación orientativa, no vinculante.</p>
+    </section>
+  </div>
+  <section class="comparison" aria-labelledby="comparison-title">
+    <h2 id="comparison-title">Intereses según el plazo</h2>
+    <p>Para el importe elegido (<strong>{{ amount() | money:'EUR' }}</strong>).</p>
+    <div class="table-wrapper"><table class="data-table"><caption class="visually-hidden">Intereses y totales para seis plazos</caption><thead><tr><th scope="col">Plazo</th><th scope="col">Intereses cliente nuevo</th><th scope="col">Intereses recurrente</th><th scope="col">Total cliente nuevo</th><th scope="col">Total recurrente</th></tr></thead><tbody>@for (row of comparison(); track row.days) {<tr><th scope="row">{{ row.days }} días</th><td>{{ row.newCustomer.interest | money:'EUR' }}</td><td>{{ row.returningCustomer.interest | money:'EUR' }}</td><td>{{ row.newCustomer.total | money:'EUR' }}</td><td>{{ row.returningCustomer.total | money:'EUR' }}</td></tr>}</tbody></table></div>
+  </section>
+  <div class="information-grid">
+    <section class="card information"><h2>¿Qué es la TAE?</h2><p>La Tasa Anual Equivalente expresa el coste del préstamo en un año e incluye intereses y comisiones. Sirve para comparar préstamos de distinto plazo.</p><span class="button button--secondary" aria-disabled="true">Calculadora TAE →</span></section>
+    <section class="card information"><h2>Consejos antes de pedir</h2><ul><li>Pide solo lo que puedas devolver en el plazo.</li><li>Compara el total a devolver, no solo la cuota.</li><li>Revisa las penalizaciones por retraso de cada entidad.</li></ul></section>
+  </div>
+</main>

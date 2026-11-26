@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "layer": "frontend",
-  "kind": "structure",
-  "generatedAt": "2026-11-26T18:58:50.168Z",
+  "kind": "features",
+  "generatedAt": "2026-11-26T19:12:18.292Z",
   "system": {
     "uid": "Ki3EmRCSLkGwM3Tnlji0",
     "name": "Credara · Comparador de préstamos online"
@@ -19,8 +19,85 @@
     }
   ],
   "environment": [],
-  "modules": [],
-  "shared": [],
+  "modules": [
+    {
+      "moduleName": "lenders",
+      "title": "Inicio y comparador de entidades",
+      "featureKeys": [
+        "67edb12e-1b4f-4e83-865a-0d8b712487c1",
+        "a13a918c-de55-4974-8692-27eef72380bd"
+      ],
+      "services": [
+        {
+          "method": "GET",
+          "path": "/api/lenders",
+          "name": "listLenders",
+          "description": "Obtiene hasta tres entidades destacadas para el inicio con featured=true, o las entidades activas filtradas y ordenadas para el comparador."
+        }
+      ]
+    },
+    {
+      "moduleName": "loan-requests",
+      "title": "Simulador avanzado y solicitud de ofertas",
+      "featureKeys": [
+        "8f98d026-a93d-4a16-84ba-626054c8d919",
+        "822a6f75-6c23-4e09-83ab-ad757c8118a9"
+      ],
+      "services": [
+        {
+          "method": "POST",
+          "path": "/api/loan-requests",
+          "name": "createLoanRequest",
+          "description": "Envía los datos y consentimientos y devuelve el identificador de la solicitud creada."
+        },
+        {
+          "method": "GET",
+          "path": "/api/loan-requests/:id/offers",
+          "name": "getLoanRequestOffers",
+          "description": "Obtiene las ofertas compatibles de una solicitud sin exponer URLs de afiliado."
+        },
+        {
+          "method": "POST",
+          "path": "/api/loan-requests/:id/clicks",
+          "name": "recordOfferClick",
+          "description": "Registra el clic en una oferta y devuelve la URL de destino."
+        }
+      ]
+    },
+    {
+      "moduleName": "loan-types",
+      "title": "Tipos de préstamo",
+      "featureKeys": [
+        "98ad01a1-aa1d-4d92-8771-cacee72cd586"
+      ],
+      "services": [
+        {
+          "method": "GET",
+          "path": "/api/loan-types",
+          "name": "listLoanTypes",
+          "description": "Obtiene los tipos de préstamo activos para el índice."
+        },
+        {
+          "method": "GET",
+          "path": "/api/loan-types/:slug",
+          "name": "getLoanType",
+          "description": "Obtiene el contenido, los relacionados y las entidades de un tipo activo."
+        }
+      ]
+    }
+  ],
+  "shared": [
+    {
+      "path": "src/app/features/loan-requests/models/loan-calculation.ts",
+      "exportName": "calculateLoan",
+      "kind": "function"
+    },
+    {
+      "path": "src/app/features/loan-requests/data-access/loan-simulation.service.ts",
+      "exportName": "LoanSimulationService",
+      "kind": "injectable-service"
+    }
+  ],
   "frontend": {
     "apiBaseUrls": [
       {
@@ -44,14 +121,57 @@
       }
     ],
     "useMock": true,
-    "consumedEndpoints": []
+    "consumedEndpoints": [
+      {
+        "moduleName": "lenders",
+        "method": "GET",
+        "path": "/api/lenders",
+        "name": "listLenders",
+        "description": "Obtiene hasta tres entidades destacadas para el inicio con featured=true, o las entidades activas filtradas y ordenadas para el comparador."
+      },
+      {
+        "moduleName": "loan-requests",
+        "method": "POST",
+        "path": "/api/loan-requests",
+        "name": "createLoanRequest",
+        "description": "Envía los datos y consentimientos y devuelve el identificador de la solicitud creada."
+      },
+      {
+        "moduleName": "loan-requests",
+        "method": "GET",
+        "path": "/api/loan-requests/:id/offers",
+        "name": "getLoanRequestOffers",
+        "description": "Obtiene las ofertas compatibles de una solicitud sin exponer URLs de afiliado."
+      },
+      {
+        "moduleName": "loan-requests",
+        "method": "POST",
+        "path": "/api/loan-requests/:id/clicks",
+        "name": "recordOfferClick",
+        "description": "Registra el clic en una oferta y devuelve la URL de destino."
+      },
+      {
+        "moduleName": "loan-types",
+        "method": "GET",
+        "path": "/api/loan-types",
+        "name": "listLoanTypes",
+        "description": "Obtiene los tipos de préstamo activos para el índice."
+      },
+      {
+        "moduleName": "loan-types",
+        "method": "GET",
+        "path": "/api/loan-types/:slug",
+        "name": "getLoanType",
+        "description": "Obtiene el contenido, los relacionados y las entidades de un tipo activo."
+      }
+    ]
   },
   "relations": [
     "Backend: el front arma cada llamada con apiBaseUrl /api (src/environments/environment.backend.ts), /api (src/environments/environment.production.ts), /api (src/environments/environment.ts) + el path del servicio.",
     "Backend: en desarrollo el front redirige /api → http://localhost:8080: el backend tiene que levantar ahí.",
     "Backend: el front levanta en el puerto 4200: ese origen va en la configuración de CORS del backend.",
-    "Backend: el front todavía no consume endpoints.",
+    "Backend: el front consume 6 endpoints (frontend.consumedEndpoints); cualquier cambio de method, path o forma de los DTOs lo rompe.",
     "useMock está en true: el front todavía responde con datos mock."
   ],
-  "readme": "# Credara · Comparador de préstamos online\n\nEstructura inicial del sitio público en Angular. Todavía no hay módulos funcionales: la ruta principal muestra una página de bienvenida y la navegación está vacía.\n\n## Desarrollo\n\nRequiere Node.js compatible con Angular 22 y npm.\n\n```sh\nnpm install\nnpm start\n```\n\n`npm start` utiliza la configuración de desarrollo con mocks. Cuando existan endpoints funcionales en la API local, puedes ejecutar el frontend contra ella:\n\n```sh\nnpm run start:backend\n```\n\nEsta configuración usa el proxy de `/api` hacia `http://localhost:8080`. Por ahora, el backend solo expone `GET /api/health`; no hay servicios funcionales que consumir.\n\n```sh\nnpm run build\n```\n\nEl build utiliza siempre `environment.production.ts`, sin mocks y con la API bajo `/api` en el mismo origen. Al desplegar las capas por separado, configura el servidor público para dirigir ese prefijo al backend en el puerto 8080 y servir el frontend desde un origen permitido por `FRONT_URL` en el backend. La base Firestore funciona detrás del backend; el frontend no se conecta directamente a ella.\n\n## Módulos\n\nTodavía no hay módulos funcionales.\n"
+  "readme": "# Credara · Comparador de préstamos online\n\nSitio público Angular 22. No requiere cuenta ni inicio de sesión.\n\n## Desarrollo\n\nRequiere Node.js y npm. Para abrir la aplicación con datos de ejemplo, sin levantar el backend:\n\n```sh\nnpm install\nnpm start\n```\n\nPara trabajar con la API local, levanta primero el backend en el puerto `8080` y ejecuta:\n\n```sh\nnpm run start:backend\n```\n\nEl frontend se sirve en `http://localhost:4200`. Su proxy envía las solicitudes `/api` al backend en `http://localhost:8080`; este permite el origen del frontend mediante `FRONT_URL=http://localhost:4200`. El backend se conecta a Firestore, que en desarrollo utiliza el emulador en `127.0.0.1:8085` con el proyecto `demo-app`. El frontend nunca accede directamente a Firestore.\n\n## Compilación\n\n```sh\nnpm run build\n```\n\nLa compilación de producción usa `environment.production.ts`: desactiva los mocks y llama a la API bajo `/api` en el mismo origen. Para desplegarla en otro origen, configura el encaminamiento de `/api` hacia el backend.\n\n## Módulos\n\n- `lenders`: inicio con ofertas destacadas y comparador de entidades.\n- `loan-requests`: simulador avanzado y solicitud de ofertas.\n- `loan-types`: índice y páginas de tipos de préstamo.\n\nLas pantallas consumen exclusivamente los endpoints públicos `/api/lenders`, `/api/loan-requests` y `/api/loan-types` del backend. El backend escucha en el puerto `8080`; la base Firestore y sus datos se preparan por separado antes de usar el modo conectado.\n"
 }

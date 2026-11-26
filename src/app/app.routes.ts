@@ -1,10 +1,18 @@
-import type { Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 
 export const routes: Routes = [
+  { path: '', pathMatch: 'full', redirectTo: 'lenders' },
   {
-    path: '',
-    pathMatch: 'full',
-    loadComponent: () => import('./home-page').then(m => m.HomePage)
+    path: 'lenders',
+    loadChildren: () => import('./features/lenders/lenders.routes').then(m => m.LENDERS_ROUTES),
   },
-  { path: '**', redirectTo: '' }
+  {
+    path: 'loan-requests',
+    loadChildren: () => import('./features/loan-requests/loan-requests.routes').then(m => m.LOAN_REQUESTS_ROUTES),
+  },
+  {
+    path: 'loan-types',
+    loadChildren: () => import('./features/loan-types/loan-types.routes').then(m => m.LOAN_TYPES_ROUTES),
+  },
+  { path: '**', redirectTo: '' },
 ];
