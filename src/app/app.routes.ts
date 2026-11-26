@@ -1,10 +1,14 @@
+import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
 
+@Component({
+  selector: 'app-home-page',
+  standalone: true,
+  template: '<main class="card"><h1>Bienvenido a Prestia</h1><p>Próximamente podrás simular y comparar préstamos desde aquí.</p></main>',
+})
+class HomePage {}
+
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'loan-applications' },
-  {
-    path: 'loan-applications',
-    loadChildren: () => import('./features/loan-applications/loan-applications.routes').then(m => m.LOAN_APPLICATIONS_ROUTES)
-  },
-  { path: '**', redirectTo: '' }
+  { path: '', component: HomePage, pathMatch: 'full' },
+  { path: '**', redirectTo: '' },
 ];
