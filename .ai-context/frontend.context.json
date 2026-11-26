@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "layer": "frontend",
-  "kind": "structure",
-  "generatedAt": "2026-11-26T13:44:45.192Z",
+  "kind": "features",
+  "generatedAt": "2026-11-26T14:04:00.815Z",
   "system": {
     "uid": "S4CeVkFRoFLVUT6QpiGL",
     "name": "Prestia · Simulador de préstamos"
@@ -19,7 +19,30 @@
     }
   ],
   "environment": [],
-  "modules": [],
+  "modules": [
+    {
+      "moduleName": "loan-applications",
+      "title": "Simulador y solicitud de préstamos",
+      "featureKeys": [
+        "2a6a0a55-5507-4a1d-91b8-48ec726a4fad",
+        "68f67483-dcba-4add-8989-02f37af90ee3"
+      ],
+      "services": [
+        {
+          "method": "POST",
+          "path": "/api/loan-applications",
+          "name": "createLoanApplication",
+          "description": "Guarda la solicitud confirmada con Idempotency-Key y devuelve su id."
+        },
+        {
+          "method": "GET",
+          "path": "/api/loan-applications/:id/offers",
+          "name": "getLoanApplicationOffers",
+          "description": "Obtiene las ofertas de la solicitud guardada para mostrarlas en el quinto paso."
+        }
+      ]
+    }
+  ],
   "shared": [],
   "frontend": {
     "apiBaseUrls": [
@@ -44,14 +67,29 @@
       }
     ],
     "useMock": true,
-    "consumedEndpoints": []
+    "consumedEndpoints": [
+      {
+        "moduleName": "loan-applications",
+        "method": "POST",
+        "path": "/api/loan-applications",
+        "name": "createLoanApplication",
+        "description": "Guarda la solicitud confirmada con Idempotency-Key y devuelve su id."
+      },
+      {
+        "moduleName": "loan-applications",
+        "method": "GET",
+        "path": "/api/loan-applications/:id/offers",
+        "name": "getLoanApplicationOffers",
+        "description": "Obtiene las ofertas de la solicitud guardada para mostrarlas en el quinto paso."
+      }
+    ]
   },
   "relations": [
     "Backend: el front arma cada llamada con apiBaseUrl /api (src/environments/environment.backend.ts), /api (src/environments/environment.production.ts), /api (src/environments/environment.ts) + el path del servicio.",
     "Backend: en desarrollo el front redirige /api → http://localhost:8080: el backend tiene que levantar ahí.",
     "Backend: el front levanta en el puerto 4200: ese origen va en la configuración de CORS del backend.",
-    "Backend: el front todavía no consume endpoints.",
+    "Backend: el front consume 2 endpoints (frontend.consumedEndpoints); cualquier cambio de method, path o forma de los DTOs lo rompe.",
     "useMock está en true: el front todavía responde con datos mock."
   ],
-  "readme": "# Prestia · Simulador de préstamos\n\nFrontend público de Prestia, desarrollado con Angular 22. Esta estructura inicial muestra una página de bienvenida; el simulador y la solicitud se incorporarán en sus módulos. No requiere inicio de sesión.\n\n## Desarrollo\n\nRequiere Node.js y npm. Para iniciar la aplicación con la configuración de desarrollo y mocks:\n\n```sh\nnpm install\nnpm start\n```\n\nPara conectarla al backend local, inicia primero la API en el puerto 8080 y ejecuta:\n\n```sh\nnpm run start:backend\n```\n\nEl proxy de desarrollo envía las solicitudes bajo `/api` al backend en `http://localhost:8080`. El backend permite el origen `http://localhost:4200` mediante `FRONT_URL`. Su única ruta disponible en esta estructura inicial es `GET /api/health`; todavía no hay servicios de funcionalidades que consumir.\n\n## Compilación\n\n```sh\nnpm run build\n```\n\nLa compilación usa `environment.production.ts`: desactiva los mocks y espera la API en el mismo origen bajo `/api`. Para desplegar frontend y backend en orígenes distintos, configura la URL de la API y el origen permitido por CORS para ese entorno.\n\n## Módulos\n\nAún no hay módulos de funcionalidades. La navegación se completará cuando se generen.\n"
+  "readme": "# Prestia · Simulador de préstamos\n\nSitio público para simular préstamos y completar una solicitud en pasos. No requiere iniciar sesión.\n\n## Desarrollo\n\nRequiere Node.js y npm. Para usar los datos de ejemplo sin iniciar el backend:\n\n```sh\nnpm install\nnpm start\n```\n\nPara conectar con la API local, inicia primero el emulador de Firestore y el backend según sus respectivos README. Luego ejecuta:\n\n```sh\nnpm run start:backend\n```\n\nEl frontend se sirve en `http://localhost:4200`. La configuración `backend` desactiva los mocks y envía las peticiones bajo `/api` mediante el proxy de desarrollo a `http://localhost:8080`. El backend permite el origen del frontend mediante `FRONT_URL=http://localhost:4200`; en desarrollo usa `FIREBASE_PROJECT_ID=demo-app` y `FIRESTORE_EMULATOR_HOST=127.0.0.1:8085` para conectarse al emulador de la base de datos. El frontend no accede directamente a Firestore.\n\n## Compilación\n\n```sh\nnpm run build\n```\n\nLa compilación utiliza siempre la configuración de producción: mocks desactivados y API en el mismo origen bajo `/api`. El despliegue debe dirigir ese prefijo al backend.\n\n## Módulos\n\n- **Simulador y solicitud de préstamos** (`/loan-applications`): simulación pública, solicitud en pasos y consulta de ofertas. Consume `POST /api/loan-applications` y `GET /api/loan-applications/:id/offers`.\n"
 }

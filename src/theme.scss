@@ -19,16 +19,16 @@
   --font-family: Inter, -apple-system, 'Segoe UI', sans-serif;
   --color-primary: var(--primary);
   --color-accent: var(--accent);
-  --color-bg: var(--background);
+  --color-background: var(--background);
   --color-surface: var(--surface);
-  --color-surface-muted: var(--soft-background);
-  --color-active: var(--active-item);
+  --color-soft-background: var(--soft-background);
+  --color-active-item: var(--active-item);
   --color-border: var(--border);
   --color-text: var(--text-primary);
-  --color-muted: var(--text-secondary);
+  --color-text-muted: var(--text-secondary);
   --color-success: var(--success);
   --color-warning: var(--warning);
-  --color-danger: var(--error);
+  --color-error: var(--error);
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
   --space-md: 1rem;
@@ -40,13 +40,13 @@
 /* theme-tokens:start — variables del kit que el tema no definía (completadas al generar) */
 :root {
   --color-on-primary: #ffffff;
-  --color-background: var(--background);
-  --color-text-muted: var(--text-secondary);
+  --color-surface-muted: var(--soft-background);
   --color-focus: var(--accent);
   --color-info: var(--primary);
   --color-info-surface: #edeaf4;
   --color-success-surface: #e4f8ec;
   --color-warning-surface: #fbf2e1;
+  --color-danger: var(--error);
   --color-danger-surface: #fcecef;
 }
 /* theme-tokens:end */
