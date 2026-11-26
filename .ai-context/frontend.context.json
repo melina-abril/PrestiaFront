@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "layer": "frontend",
+  "kind": "structure",
+  "generatedAt": "2026-11-26T13:44:45.192Z",
+  "system": {
+    "uid": "S4CeVkFRoFLVUT6QpiGL",
+    "name": "Prestia · Simulador de préstamos"
+  },
+  "architecture": {
+    "name": "Angular 22 · standalone + signals",
+    "stack": "angular"
+  },
+  "repositoryPath": "https://github.com/melina-abril/PrestiaFront",
+  "ports": [
+    {
+      "port": 4200,
+      "file": "angular.json"
+    }
+  ],
+  "environment": [],
+  "modules": [],
+  "shared": [],
+  "frontend": {
+    "apiBaseUrls": [
+      {
+        "file": "src/environments/environment.backend.ts",
+        "value": "/api"
+      },
+      {
+        "file": "src/environments/environment.production.ts",
+        "value": "/api"
+      },
+      {
+        "file": "src/environments/environment.ts",
+        "value": "/api"
+      }
+    ],
+    "proxies": [
+      {
+        "file": "proxy.conf.json",
+        "context": "/api",
+        "target": "http://localhost:8080"
+      }
+    ],
+    "useMock": true,
+    "consumedEndpoints": []
+  },
+  "relations": [
+    "Backend: el front arma cada llamada con apiBaseUrl /api (src/environments/environment.backend.ts), /api (src/environments/environment.production.ts), /api (src/environments/environment.ts) + el path del servicio.",
+    "Backend: en desarrollo el front redirige /api → http://localhost:8080: el backend tiene que levantar ahí.",
+    "Backend: el front levanta en el puerto 4200: ese origen va en la configuración de CORS del backend.",
+    "Backend: el front todavía no consume endpoints.",
+    "useMock está en true: el front todavía responde con datos mock."
+  ],
+  "readme": "# Prestia · Simulador de préstamos\n\nFrontend público de Prestia, desarrollado con Angular 22. Esta estructura inicial muestra una página de bienvenida; el simulador y la solicitud se incorporarán en sus módulos. No requiere inicio de sesión.\n\n## Desarrollo\n\nRequiere Node.js y npm. Para iniciar la aplicación con la configuración de desarrollo y mocks:\n\n```sh\nnpm install\nnpm start\n```\n\nPara conectarla al backend local, inicia primero la API en el puerto 8080 y ejecuta:\n\n```sh\nnpm run start:backend\n```\n\nEl proxy de desarrollo envía las solicitudes bajo `/api` al backend en `http://localhost:8080`. El backend permite el origen `http://localhost:4200` mediante `FRONT_URL`. Su única ruta disponible en esta estructura inicial es `GET /api/health`; todavía no hay servicios de funcionalidades que consumir.\n\n## Compilación\n\n```sh\nnpm run build\n```\n\nLa compilación usa `environment.production.ts`: desactiva los mocks y espera la API en el mismo origen bajo `/api`. Para desplegar frontend y backend en orígenes distintos, configura la URL de la API y el origen permitido por CORS para ese entorno.\n\n## Módulos\n\nAún no hay módulos de funcionalidades. La navegación se completará cuando se generen.\n"
+}
