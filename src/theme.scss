@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --primary: #5B3DF5;
+  --accent: #FF4D8D;
+  --background: #FBFAFF;
+  --surface: #FFFFFF;
+  --soft-background: #F3EFFF;
+  --active-item: #E9E3FF;
+  --border: #E7E4F2;
+  --text-primary: #0F0B2E;
+  --text-secondary: #5E5A78;
+  --success: #12B886;
+  --warning: #F59F0A;
+  --error: #F0436A;
+
+  --primary-600: #4A2DE0;
+  --primary-700: #3A20B8;
+  --primary-300: #A898FF;
+  --accent-600: #E8366F;
+  --teal: #14C8C4;
+  --teal-soft: #DDF8F7;
+  --sun: #FFC25C;
+  --ink: #0F0B2E;
+  --ink-800: #1B1640;
+  --ink-700: #2A2457;
+  --on-primary: #FFFFFF;
+  --success-soft: #E3F8F0;
+  --warning-soft: #FFF3DB;
+  --error-soft: #FFE6EC;
+
+  --gradient-brand: linear-gradient(120deg, #5B3DF5 0%, #9B3DF0 50%, #FF4D8D 100%);
+  --gradient-text: linear-gradient(100deg, #6A3DF5 0%, #B13CE8 45%, #FF4D8D 100%);
+  --gradient-cool: linear-gradient(135deg, #5B3DF5 0%, #14C8C4 100%);
+  --gradient-hero: radial-gradient(60% 60% at 15% 10%, rgba(155, 125, 255, .28) 0%, rgba(155, 125, 255, 0) 70%), radial-gradient(50% 55% at 90% 20%, rgba(255, 77, 141, .20) 0%, rgba(255, 77, 141, 0) 70%), radial-gradient(45% 50% at 70% 95%, rgba(20, 200, 196, .18) 0%, rgba(20, 200, 196, 0) 70%), #FBFAFF;
+  --gradient-soft: linear-gradient(180deg, #F3EFFF 0%, #FBFAFF 100%);
+  --gradient-dark: radial-gradient(80% 120% at 0% 0%, #3A20B8 0%, #1B1640 55%, #0F0B2E 100%);
+
+  --font-display: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-family: var(--font-body);
+  --fs-display: clamp(2.75rem, 5.5vw + .5rem, 4.75rem);
+  --fs-h1: clamp(2.25rem, 3.6vw + .5rem, 3.5rem);
+  --fs-h2: clamp(1.875rem, 2.4vw + .5rem, 2.75rem);
+  --fs-h3: 1.375rem;
+  --fs-h4: 1.125rem;
+  --fs-lead: clamp(1.0625rem, .4vw + 1rem, 1.25rem);
+  --fs-body: 1rem;
+  --fs-small: .875rem;
+  --fs-eyebrow: .8125rem;
+  --lh-tight: 1.08;
+  --lh-heading: 1.2;
+  --lh-body: 1.65;
+  --tracking-tight: -.03em;
+  --tracking-eyebrow: .08em;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --section-y: clamp(72px, 9vw, 128px);
+  --container: 1200px;
+  --container-narrow: 760px;
+  --gutter: clamp(20px, 4vw, 32px);
+
+  --radius: 12px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-pill: 999px;
+
+  --shadow-xs: 0 1px 2px rgba(15, 11, 46, .06);
+  --shadow-sm: 0 4px 14px rgba(37, 22, 120, .07);
+  --shadow-md: 0 12px 32px rgba(37, 22, 120, .10);
+  --shadow-lg: 0 24px 60px rgba(37, 22, 120, .16);
+  --shadow-brand: 0 10px 28px rgba(91, 61, 245, .35);
+  --shadow-accent: 0 10px 28px rgba(255, 77, 141, .32);
+  --ring: 0 0 0 4px rgba(91, 61, 245, .22);
+  --glass-bg: rgba(255, 255, 255, .72);
+  --glass-border: rgba(255, 255, 255, .6);
+  --glass-blur: saturate(180%) blur(16px);
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  --dur-fast: 150ms;
+  --dur-base: 250ms;
+  --dur-slow: 600ms;
+
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-soft-background: var(--soft-background);
+  --color-active-item: var(--active-item);
+  --color-border: var(--border);
+  --color-text: var(--text-primary);
+  --color-text-muted: var(--text-secondary);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-danger: var(--error);
+  --color-info: var(--primary);
+}
+
+/* theme-tokens:start — variables del kit que el tema no definía (completadas al generar) */
+:root {
+  --color-on-primary: #ffffff;
+  --color-surface-muted: var(--soft-background);
+  --color-focus: var(--accent);
+  --color-info-surface: #efecfe;
+  --color-success-surface: #e3f6f0;
+  --color-warning-surface: #fef1da;
+  --color-danger-surface: #feecf0;
+}
+/* theme-tokens:end */
