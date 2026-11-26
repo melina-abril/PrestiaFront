@@ -1,0 +1,50 @@
+<nav class="breadcrumb" aria-label="Migas de pan"><a routerLink="/lenders">Inicio</a> <span aria-hidden="true">›</span> <span aria-current="page">Blog</span></nav>
+<main class="blog-page">
+  <h1>Blog de finanzas personales</h1>
+  <p class="blog-page__subtitle">Guías y consejos para pedir dinero con cabeza.</p>
+  <div class="blog-page__categories" role="group" aria-label="Filtrar por categoría">
+    @for (category of categories; track category) {
+      <button type="button" [class.blog-page__category--active]="(query().categoria ?? 'Todas') === category" [attr.aria-pressed]="(query().categoria ?? 'Todas') === category" (click)="selectCategory(category)">{{ category }}</button>
+    }
+  </div>
+  @let state = articlesState();
+  @switch (state.status) {
+    @case ('loading') { <app-loading-state message="Cargando artículos…" /> }
+    @case ('error') { <app-error-alert message="No pudimos cargar los artículos." retryLabel="Reintentar" (retry)="retry()" /> }
+    @case ('empty') { <app-empty-state message="Todavía no hay artículos en esta categoría." /> }
+    @case ('ready') {
+      @if (state.data.articulos.length === 0) {
+        <app-empty-state message="Todavía no hay artículos en esta categoría." />
+      } @else {
+        <div class="blog-page__grid">
+          @for (article of state.data.articulos; track article.slug) {
+            <article class="blog-page__card">
+              @if (article.imagenUrl) {
+                <img class="blog-page__image" [src]="article.imagenUrl" [alt]="article.titulo" />
+              } @else {
+                <div class="blog-page__image blog-page__image--empty" aria-hidden="true"></div>
+              }
+              <div class="blog-page__body">
+                <span class="blog-page__chip">{{ article.categoria }}</span>
+                <h2>{{ article.titulo }}</h2>
+                <p class="blog-page__meta">{{ article.fechaPublicacion | date:'dd/MM/yyyy' }} · {{ article.minutosLectura }} min de lectura</p>
+                <p class="blog-page__summary">{{ article.resumen }}</p>
+                <a [routerLink]="[article.slug]">Leer artículo →</a>
+              </div>
+            </article>
+          }
+        </div>
+        @if (state.data.totalPaginas > 1) {
+          <nav class="blog-page__pager" aria-label="Páginas del blog">
+            @for (page of pageNumbers(state.data.totalPaginas); track page) {
+              <button type="button" [class.blog-page__page--active]="page === state.data.pagina" [attr.aria-current]="page === state.data.pagina ? 'page' : null" (click)="goToPage(page)">{{ page }}</button>
+            }
+            @if (state.data.pagina < state.data.totalPaginas) {
+              <button type="button" (click)="goToPage(state.data.pagina + 1)">Siguiente →</button>
+            }
+          </nav>
+        }
+      }
+    }
+  }
+</main>
