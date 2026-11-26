@@ -18,11 +18,10 @@
 :root {
   --font-family: Inter, -apple-system, 'Segoe UI', sans-serif;
   --color-primary: var(--primary);
-  --color-primary-hover: color-mix(in srgb, var(--primary) 85%, var(--text-primary));
   --color-accent: var(--accent);
   --color-bg: var(--background);
   --color-surface: var(--surface);
-  --color-soft-bg: var(--soft-background);
+  --color-soft-background: var(--soft-background);
   --color-active-item: var(--active-item);
   --color-border: var(--border);
   --color-text: var(--text-primary);
