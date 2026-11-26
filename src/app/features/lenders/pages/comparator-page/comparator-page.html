@@ -1,0 +1,28 @@
+<nav class="breadcrumb" aria-label="Migas de pan"><a routerLink="/lenders">Inicio</a> › <span>Comparador de entidades</span></nav>
+<header class="page-heading"><h1>Comparador de préstamos</h1><p>Filtra por lo que necesitas y compara las condiciones de cada entidad.</p></header>
+<div class="comparator">
+  <button type="button" class="button button--secondary filters-toggle" [attr.aria-expanded]="filterOpen()" aria-controls="comparator-filters" (click)="filterOpen.set(!filterOpen())">Filtros ({{ filterCount() }})</button>
+  <aside class="card filters" id="comparator-filters" [class.filters--open]="filterOpen()" aria-label="Filtros de entidades">
+    <h2>Filtrar</h2>
+    <div class="form-field"><label for="filter-amount">Importe que necesitas</label><input id="filter-amount" type="number" min="50" max="2000" [value]="fields().amount" [attr.aria-invalid]="errors().amount ? 'true' : null" [attr.aria-describedby]="errors().amount ? 'amount-error' : 'amount-hint'" (input)="setNumber('amount', $any($event.target).value)" /><span id="amount-hint" class="hint">De 50 € a 2.000 €</span>@if (errors().amount) { <span id="amount-error" class="form-field__error">{{ errors().amount }}</span> }</div>
+    <div class="form-field"><label for="filter-days">Plazo (días)</label><input id="filter-days" type="number" min="7" max="90" [value]="fields().termDays" [attr.aria-invalid]="errors().termDays ? 'true' : null" [attr.aria-describedby]="errors().termDays ? 'days-error' : 'days-hint'" (input)="setNumber('termDays', $any($event.target).value)" /><span id="days-hint" class="hint">De 7 a 90 días</span>@if (errors().termDays) { <span id="days-error" class="form-field__error">{{ errors().termDays }}</span> }</div>
+    <div class="form-field"><label for="filter-age">Tu edad</label><input id="filter-age" type="number" min="18" max="100" [value]="fields().age" [attr.aria-invalid]="errors().age ? 'true' : null" [attr.aria-describedby]="errors().age ? 'age-error' : null" (input)="setNumber('age', $any($event.target).value)" />@if (errors().age) { <span id="age-error" class="form-field__error">{{ errors().age }}</span> }</div>
+    <div class="filters__checks"><label><input type="checkbox" [checked]="fields().firstLoanFree" (change)="setFlag('firstLoanFree', $any($event.target).checked)" /> Primer préstamo gratis</label><label><input type="checkbox" [checked]="fields().asnef" (change)="setFlag('asnef', $any($event.target).checked)" /> Aceptan ASNEF</label><label><input type="checkbox" [checked]="fields().noPayslip" (change)="setFlag('noPayslip', $any($event.target).checked)" /> Sin nómina</label></div>
+    <button type="button" class="button button--secondary filters__clear" (click)="clear()">Limpiar filtros</button>
+  </aside>
+  <section class="results" aria-label="Entidades comparadas">
+    @let state = lendersState();
+    <div class="toolbar"><span>@if (state.status === 'ready') { <strong>{{ state.data.totalItems }} {{ state.data.totalItems === 1 ? 'entidad encaja' : 'entidades encajan' }}</strong> con tu búsqueda } @else { Entidades para tu búsqueda }</span><label for="lender-sort">Ordenar por</label><select id="lender-sort" [value]="fields().sort" (change)="setSort($any($event.target).value)"><option value="recommended">Recomendadas</option><option value="total" [disabled]="!totalSortAvailable()">Menor total a devolver</option><option value="maxAmount">Mayor importe máximo</option><option value="response">Respuesta más rápida</option></select></div>
+    @if (!valid()) { <p class="form-field__error" role="alert">Revisa los filtros marcados antes de continuar.</p> }
+    @switch (state.status) {
+      @case ('loading') { <app-loading-state message="Cargando entidades…" /> }
+      @case ('error') { <app-error-alert message="No pudimos cargar las entidades." retryLabel="Reintentar" (retry)="reload()" /> }
+      @case ('empty') { <app-empty-state message="Ninguna entidad cumple todos tus filtros."><button type="button" class="button button--secondary" (click)="clear()">Limpiar filtros</button></app-empty-state> }
+      @case ('ready') {
+        @if (state.data.items.length === 0) { <app-empty-state message="Ninguna entidad cumple todos tus filtros."><button type="button" class="button button--secondary" (click)="clear()">Limpiar filtros</button></app-empty-state> }
+        @else { @for (lender of state.data.items; track lender.id) { <app-lender-card [lender]="lender" [amount]="applied().amount ? requestAmount() : null" [days]="applied().termDays ? requestDays() : null" [showDetails]="true" /> } }
+      }
+    }
+    <p class="legal-note">Datos informativos actualizados por Credara. Las condiciones finales las fija cada entidad y están sujetas a su aprobación. Credara puede recibir una comisión de las entidades, sin coste para ti.</p>
+  </section>
+</div>
