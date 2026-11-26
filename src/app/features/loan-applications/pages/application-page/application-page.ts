@@ -100,7 +100,8 @@ export class ApplicationPage {
   constructor() {
     this.form.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       const value = this.form.getRawValue();
-      this.drafts.update({ ...value, ...value.phone, phone: undefined, applicationId: null, idempotencyKey: null });
+      const { phone, ...draftValue } = value;
+      this.drafts.update({ ...draftValue, ...phone, applicationId: null, idempotencyKey: null });
       this.serverErrors.set({});
       this.sendError.set(null);
     });
