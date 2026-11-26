@@ -7,6 +7,14 @@ export const routes: Routes = [
     loadChildren: () => import('./features/lenders/lenders.routes').then(m => m.LENDERS_ROUTES)
   },
   {
+    path: 'blog',
+    loadChildren: () => import('./features/blog/blog.routes').then(m => m.BLOG_ROUTES)
+  },
+  {
+    path: 'contacto',
+    loadChildren: () => import('./features/contact/contact.routes').then(m => m.CONTACT_ROUTES)
+  },
+  {
     path: 'loan-requests',
     loadChildren: () => import('./features/loan-requests/loan-requests.routes').then(m => m.LOAN_REQUESTS_ROUTES)
   },
