@@ -1,0 +1,41 @@
+<main class="loan-types-page">
+  <nav class="breadcrumbs" aria-label="Ruta de navegación"><a routerLink="/lenders">Inicio</a><span aria-hidden="true">›</span><span aria-current="page">Préstamos</span></nav>
+  <header class="intro">
+    <span class="eyebrow">Encuentra lo que necesitas</span>
+    <h1>Tipos de préstamo</h1>
+    <p>Elige el que se ajusta a tu situación y mira qué entidades lo ofrecen.</p>
+  </header>
+  @let state = typesState();
+  @switch (state.status) {
+    @case ('loading') {
+      <div class="type-grid" role="status" aria-label="Cargando tipos de préstamo">
+        @for (placeholder of placeholders; track placeholder) {
+          <div class="type-card skeleton" aria-hidden="true"><span class="skeleton__icon"></span><span class="skeleton__line"></span><span class="skeleton__line skeleton__line--short"></span></div>
+        }
+        <span class="visually-hidden">Cargando tipos de préstamo…</span>
+      </div>
+    }
+    @case ('error') {
+      <app-error-alert message="No pudimos cargar los tipos de préstamo." retryLabel="Reintentar" (retry)="reload()" />
+    }
+    @case ('empty') {
+      <app-empty-state message="No hay tipos de préstamo disponibles en este momento." />
+    }
+    @case ('ready') {
+      @if (state.data.length === 0) {
+        <app-empty-state message="No hay tipos de préstamo disponibles en este momento." />
+      } @else {
+        <div class="type-grid">
+          @for (loanType of state.data; track loanType.slug) {
+            <a class="type-card" [routerLink]="loanType.slug">
+              <span class="type-card__icon" aria-hidden="true">{{ loanType.icon }}</span>
+              <h2>{{ loanType.title }}</h2>
+              <p>{{ loanType.summary }}</p>
+              <span class="type-card__arrow" aria-hidden="true">Ver entidades →</span>
+            </a>
+          }
+        </div>
+      }
+    }
+  }
+</main>

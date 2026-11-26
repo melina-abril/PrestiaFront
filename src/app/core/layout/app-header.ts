@@ -168,7 +168,7 @@ export class AppHeader {
     const path = this.currentPath();
     if (!this.items.length || path === this.homePath || path === '/') return [];
     const matches = this.items.filter(item => path === '/' + item.path || path.startsWith('/' + item.path + '/'));
-    const parent = matches.sort((a, b) => a.path.length - b.path.length);
+    const parent = matches.sort((a, b) => a.path.length - b.path);
     const last = parent[parent.length - 1];
     const label = last && path === '/' + last.path ? last.label : decodeURIComponent(path.split('/').filter(Boolean).at(-1) ?? 'Página');
     const crumbs: Crumb[] = [{ label: 'Inicio', path: this.homePath }];
