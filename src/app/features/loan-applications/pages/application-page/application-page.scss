@@ -1,0 +1,48 @@
+.application-page { width: 100%; }
+.breadcrumb, .lead, .sub, .hint { color: var(--text-secondary); }
+.breadcrumb, .hint { font-size: 0.8rem; }
+.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 280px; align-items: start; gap: var(--space-lg); margin-top: var(--space-lg); }
+.panel { min-width: 0; }
+.stepper { display: flex; justify-content: space-between; gap: var(--space-xs); padding: 0 0 var(--space-lg); margin: 0 0 var(--space-lg); list-style: none; border-bottom: 1px solid var(--border); }
+.stepper li { color: var(--text-secondary); font-size: 0.75rem; text-align: center; flex: 1; }
+.stepper li span { display: block; width: 1.6rem; line-height: 1.6rem; margin: 0 auto var(--space-xs); border: 1px solid var(--border); border-radius: 50%; }
+.stepper li.current { color: var(--primary); font-weight: 700; }
+.stepper li.current span { color: var(--surface); background: var(--primary); border-color: var(--primary); }
+.stepper li.done span { color: var(--surface); background: var(--success); border-color: var(--success); }
+.row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-md); }
+.field { display: flex; flex-direction: column; gap: var(--space-xs); margin: var(--space-md) 0; min-width: 0; }
+.field label, .choice-field legend { font-weight: 600; }
+.field input, .field select { width: 100%; min-width: 0; padding: var(--space-sm); border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text-primary); }
+.phone { display: flex; gap: var(--space-xs); }
+.phone select { width: 5.5rem; }
+.choice-field { border: 0; padding: 0; margin: var(--space-lg) 0; }
+.options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-sm); margin-top: var(--space-sm); }
+.option { display: flex; align-items: center; gap: var(--space-xs); padding: var(--space-md); border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; }
+.option.selected { border-color: var(--primary); background: var(--soft-background); }
+.option input { accent-color: var(--primary); }
+.actions { display: flex; justify-content: space-between; gap: var(--space-sm); margin-top: var(--space-lg); }
+.secure-note { color: var(--text-secondary); font-size: 0.85rem; }
+.review { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-sm); }
+.review div { padding: var(--space-md); border: 1px solid var(--border); border-radius: var(--radius); overflow-wrap: anywhere; }
+.review small { display: block; color: var(--text-secondary); }
+.review button { padding: 0; border: 0; background: none; color: var(--primary); text-decoration: underline; cursor: pointer; }
+.check { display: flex; gap: var(--space-sm); margin-top: var(--space-md); }
+.check input { accent-color: var(--primary); }
+.summary { position: sticky; top: var(--space-lg); }
+.summary h3 { margin-top: 0; }
+.summary dl { display: grid; grid-template-columns: 1fr auto; gap: var(--space-sm); }
+.summary dt { color: var(--text-secondary); }
+.summary dd { margin: 0; text-align: right; }
+.summary .total { color: var(--primary); font-size: 1.25rem; font-weight: 700; }
+.summary hr { border: 0; border-top: 1px solid var(--border); margin: var(--space-md) 0; }
+.progress { height: 0.7rem; border-radius: var(--radius); background: var(--soft-background); overflow: hidden; }
+.progress span { display: block; width: 70%; height: 100%; background: var(--primary); }
+.checklist { padding-left: var(--space-lg); color: var(--primary); }
+.offer { display: flex; align-items: center; gap: var(--space-md); margin: var(--space-md) 0; }
+.offer div:nth-child(2) { flex: 1; }
+.offer h3 { margin: 0; }
+.offer p { color: var(--text-secondary); font-size: 0.85rem; }
+.bank { display: grid; place-items: center; width: 3rem; height: 3rem; flex: none; border-radius: var(--radius); background: var(--soft-background); color: var(--primary); font-weight: 700; }
+.tag { font-size: 0.75rem; color: var(--success); }
+@media (max-width: 900px) { .wrap { display: flex; flex-direction: column-reverse; } .summary { position: static; width: 100%; } .panel-column { width: 100%; } }
+@media (max-width: 600px) { .row, .options, .review { grid-template-columns: 1fr; } .stepper li { font-size: 0.6rem; } .offer { flex-wrap: wrap; } }
