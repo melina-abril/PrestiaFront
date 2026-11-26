@@ -1,0 +1,34 @@
+<main class="contact-page">
+  <nav class="breadcrumbs" aria-label="Migas de pan"><a routerLink="/lenders">Inicio</a><span aria-hidden="true"> › </span><span aria-current="page">Contacto</span></nav>
+  <div class="intro">
+    <span class="eyebrow"><span class="eyebrow__dot" aria-hidden="true"></span> Estamos para ayudarte</span>
+    <h1>Hablemos de <span class="gradient-text">tus dudas.</span></h1>
+    <p>Cuéntanos en qué podemos ayudarte. Nuestro equipo de atención responderá tu consulta en un plazo de 48 horas laborables.</p>
+  </div>
+
+  <div class="contact-grid">
+    <form class="contact-form" [formGroup]="form" (ngSubmit)="submit()" aria-label="Formulario de contacto" novalidate>
+      <div><h2>Envíanos un mensaje</h2><p>Los campos marcados con * son obligatorios.</p></div>
+      @if (sent()) { <p class="feedback feedback--success" role="status">✓ Mensaje enviado. Te responderemos en un máximo de 48 horas laborables.</p> }
+      @if (sendError(); as message) { <p class="feedback feedback--error" role="alert">{{ message }}</p> }
+      <div class="field-row">
+        <div class="field"><label for="contact-nombre">Nombre *</label><input id="contact-nombre" formControlName="nombre" autocomplete="name" placeholder="Tu nombre" (blur)="markTouched('nombre')" [attr.aria-invalid]="errorFor('nombre') ? 'true' : null" [attr.aria-describedby]="errorFor('nombre') ? 'contact-nombre-error' : null" />@if (errorFor('nombre'); as message) { <span id="contact-nombre-error" class="field-error">{{ message }}</span> }</div>
+        <div class="field"><label for="contact-correo">Correo electrónico *</label><input id="contact-correo" type="email" formControlName="correo" autocomplete="email" placeholder="tu@correo.es" (blur)="markTouched('correo')" [attr.aria-invalid]="errorFor('correo') ? 'true' : null" [attr.aria-describedby]="errorFor('correo') ? 'contact-correo-error' : null" />@if (errorFor('correo'); as message) { <span id="contact-correo-error" class="field-error">{{ message }}</span> }</div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label for="contact-telefono">Teléfono <span class="optional">(opcional)</span></label><input id="contact-telefono" type="tel" formControlName="telefono" autocomplete="tel" placeholder="612345678" (blur)="markTouched('telefono')" [attr.aria-invalid]="errorFor('telefono') ? 'true' : null" [attr.aria-describedby]="errorFor('telefono') ? 'contact-telefono-error' : null" />@if (errorFor('telefono'); as message) { <span id="contact-telefono-error" class="field-error">{{ message }}</span> }</div>
+        <div class="field"><label for="contact-motivo">Motivo de la consulta *</label><select id="contact-motivo" formControlName="motivo" (blur)="markTouched('motivo')" [attr.aria-invalid]="errorFor('motivo') ? 'true' : null" [attr.aria-describedby]="errorFor('motivo') ? 'contact-motivo-error' : null"><option value="">Selecciona un motivo</option>@for (reason of reasons; track reason.value) { <option [value]="reason.value">{{ reason.label }}</option> }</select>@if (errorFor('motivo'); as message) { <span id="contact-motivo-error" class="field-error">{{ message }}</span> }</div>
+      </div>
+      <div class="field"><label for="contact-mensaje">Mensaje *</label><textarea id="contact-mensaje" rows="5" formControlName="mensaje" maxlength="1000" placeholder="Cuéntanos cómo podemos ayudarte…" (blur)="markTouched('mensaje')" [attr.aria-invalid]="errorFor('mensaje') ? 'true' : null" [attr.aria-describedby]="errorFor('mensaje') ? 'contact-mensaje-error contact-mensaje-count' : 'contact-mensaje-count'"></textarea><span id="contact-mensaje-count" class="character-count">{{ form.controls.mensaje.value.length }}/1.000</span>@if (errorFor('mensaje'); as message) { <span id="contact-mensaje-error" class="field-error">{{ message }}</span> }</div>
+      <div class="privacy-field"><input id="contact-aceptaPrivacidad" type="checkbox" formControlName="aceptaPrivacidad" (blur)="markTouched('aceptaPrivacidad')" [attr.aria-invalid]="errorFor('aceptaPrivacidad') ? 'true' : null" [attr.aria-describedby]="errorFor('aceptaPrivacidad') ? 'contact-privacy-error' : null" /><div><label for="contact-aceptaPrivacidad">Acepto la Política de privacidad. *</label>@if (errorFor('aceptaPrivacidad'); as message) { <span id="contact-privacy-error" class="field-error">{{ message }}</span> }</div></div>
+      <div class="form-footer"><span>Para evitar el spam, limitamos los envíos repetidos. Si no puedes enviar tu mensaje, inténtalo más tarde.</span><button type="submit" [disabled]="sending()">{{ sending() ? 'Enviando…' : 'Enviar mensaje' }} <span aria-hidden="true">→</span></button></div>
+    </form>
+
+    <aside class="contact-aside" aria-label="Información de contacto">
+      <section class="contact-card"><span class="icon-chip" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><h2>Datos de contacto</h2><p>También puedes escribirnos directamente.</p></div><div><small>CORREO ELECTRÓNICO</small><a href="mailto:contacto@credara.example">✉️ contacto@credara.example</a></div><div><small>HORARIO DE ATENCIÓN</small><strong>🕘 Lunes a viernes, 9:00 a 18:00 (hora peninsular)</strong><p>Sábados, domingos y festivos: cerrado. Respondemos en 48 h laborables.</p></div><div class="response-note">Respuesta en 48 horas laborables</div></section>
+      <section class="notice"><span class="notice__icon" aria-hidden="true">i</span><p><strong>Antes de escribirnos</strong>Credara no concede préstamos. Para dudas sobre un préstamo ya solicitado (pagos, plazos, cancelación) contacta directamente con tu entidad.</p></section>
+    </aside>
+  </div>
+
+  <section class="faq" aria-labelledby="contact-faq-heading"><span class="eyebrow">Resolvemos tus dudas</span><h2 id="contact-faq-heading">Preguntas frecuentes</h2><div class="faq__items"><details><summary>¿Cómo borro mis datos?</summary><p>Escríbenos desde este formulario con el motivo «Mis datos personales» indicando el correo con el que hiciste tu solicitud y te ayudamos a ejercer tus derechos.</p></details><details><summary>¿Podéis decirme si mi préstamo fue aprobado?</summary><p>No. La aprobación la decide cada entidad: consúltala directamente con ella.</p></details></div></section>
+</main>
