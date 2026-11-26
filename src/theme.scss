@@ -64,23 +64,15 @@
   --space-8: 64px;
   --space-9: 96px;
   --space-10: 128px;
-  --space-xs: 4px;
-  --space-sm: 8px;
-  --space-md: 16px;
-  --space-lg: 24px;
-  --space-xl: 32px;
   --section-y: clamp(72px, 9vw, 128px);
   --container: 1200px;
   --container-narrow: 760px;
   --gutter: clamp(20px, 4vw, 32px);
-
-  --radius: 12px;
   --radius-sm: 10px;
   --radius-md: 16px;
   --radius-lg: 24px;
   --radius-xl: 32px;
   --radius-pill: 999px;
-
   --shadow-xs: 0 1px 2px rgba(15, 11, 46, .06);
   --shadow-sm: 0 4px 14px rgba(37, 22, 120, .07);
   --shadow-md: 0 12px 32px rgba(37, 22, 120, .10);
@@ -101,16 +93,18 @@
   --color-accent: var(--accent);
   --color-background: var(--background);
   --color-surface: var(--surface);
-  --color-soft-background: var(--soft-background);
-  --color-active-item: var(--active-item);
   --color-border: var(--border);
   --color-text: var(--text-primary);
   --color-text-muted: var(--text-secondary);
   --color-success: var(--success);
   --color-warning: var(--warning);
-  --color-error: var(--error);
   --color-danger: var(--error);
-  --color-info: var(--primary);
+  --space-xs: var(--space-1);
+  --space-sm: var(--space-2);
+  --space-md: var(--space-4);
+  --space-lg: var(--space-5);
+  --space-xl: var(--space-7);
+  --radius: var(--radius-md);
 }
 
 /* theme-tokens:start — variables del kit que el tema no definía (completadas al generar) */
@@ -118,6 +112,7 @@
   --color-on-primary: #ffffff;
   --color-surface-muted: var(--soft-background);
   --color-focus: var(--accent);
+  --color-info: var(--primary);
   --color-info-surface: #efecfe;
   --color-success-surface: #e3f6f0;
   --color-warning-surface: #fef1da;
