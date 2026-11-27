@@ -90,7 +90,7 @@ export class ComparisonPage {
       termDays: [7, 90, 'El plazo debe estar entre 7 y 90 días.'] as const,
       age: [18, 100, 'La edad debe estar entre 18 y 100 años.'] as const,
     }[field];
-    return this.rangeError(value, ...config);
+    return this.rangeError(value, config[0], config[1], config[2]);
   }
 
   protected clear(): void {
