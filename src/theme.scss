@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
 
-/* La paleta y las clases de marca se incorporan aquí mediante el bloque brand-style del proyecto. */
+/* El bloque brand-style del proyecto aporta la paleta y los componentes Aurora. */
 :root {
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-600);
   --color-accent: var(--accent);
-  --color-bg: var(--background);
+  --color-background: var(--background);
   --color-surface: var(--surface);
   --color-surface-muted: var(--soft-background);
   --color-border: var(--border);
@@ -565,7 +565,6 @@ img { max-width: 100%; display: block; }
 /* theme-tokens:start — variables del kit que el tema no definía (completadas al generar) */
 :root {
   --color-on-primary: #ffffff;
-  --color-background: var(--background);
   --color-focus: var(--accent);
   --color-info: var(--primary);
   --color-info-surface: #efecfe;

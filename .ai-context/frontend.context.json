@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "layer": "frontend",
   "kind": "features",
-  "generatedAt": "2026-11-27T15:34:27.913Z",
+  "generatedAt": "2026-11-27T15:37:32.654Z",
   "system": {
     "uid": "Ki3EmRCSLkGwM3Tnlji0",
     "name": "Credara · Comparador de préstamos online"
@@ -20,6 +20,14 @@
   ],
   "environment": [],
   "modules": [
+    {
+      "moduleName": "about-and-legal",
+      "title": "Sobre nosotros y textos legales",
+      "featureKeys": [
+        "a889f121-4fec-46c8-bba3-d74b19fa00a3"
+      ],
+      "services": []
+    },
     {
       "moduleName": "loan-test",
       "title": "Test de préstamos",
@@ -261,5 +269,5 @@
     "Backend: el front consume 9 endpoints (frontend.consumedEndpoints); cualquier cambio de method, path o forma de los DTOs lo rompe.",
     "useMock está en true: el front todavía responde con datos mock."
   ],
-  "readme": "# Credara · Comparador de préstamos online\n\nSitio público desarrollado con Angular 22. No requiere cuenta ni inicio de sesión.\n\n## Desarrollo\n\nRequiere Node.js y npm compatibles con las versiones de Angular indicadas en `package.json`.\n\n```sh\nnpm install\nnpm start\n```\n\n`npm start` levanta la aplicación en `http://localhost:4200` con datos de muestra. Para usar la API local en lugar de los mocks, arranca primero el backend en el puerto `8080` y ejecuta:\n\n```sh\nnpm run start:backend\n```\n\nEsta configuración envía las solicitudes bajo `/api` al backend mediante `proxy.conf.json`. Para compilar:\n\n```sh\nnpm run build\n```\n\nEl build de producción usa `environment.production.ts`, siempre con `useMock: false`, y espera la API bajo `/api` en el mismo origen del sitio. Despliega el frontend detrás de un proxy que dirija ese prefijo al backend.\n\n## Pantallas\n\n- Inicio y comparador de entidades (`lenders`).\n- Test de préstamos (`herramientas/test-prestamos`).\n- Calculadora TAE (`herramientas/calculadora-tae`).\n- Cómo funciona (`como-funciona`).\n- Blog y artículos (`blog`).\n- Contacto (`contacto`).\n- Simulador avanzado (`loan-simulator`).\n- Solicitud y presentación de ofertas (`applications`).\n- Tipos de préstamo (`loan-types`).\n\n## Conexión con las otras capas\n\nEl frontend escucha en el puerto `4200` y consume los endpoints públicos del backend en el puerto `8080`, con el prefijo `/api`. Configura `FRONT_URL=http://localhost:4200` en el backend para permitir el origen del frontend. El backend utiliza Firestore; en desarrollo, su emulador escucha en `127.0.0.1:8085` con el proyecto `demo-app`. El frontend no se conecta directamente a Firestore.\n"
+  "readme": "# Credara · Comparador de préstamos online\n\nSitio público desarrollado con Angular 22. No requiere cuenta ni inicio de sesión.\n\n## Desarrollo\n\nRequiere Node.js compatible con Angular 22. Para iniciar la aplicación con los datos de demostración del entorno de desarrollo:\n\n```sh\nnpm install\nnpm start\n```\n\nPara usar la API local, inicia el backend en el puerto `8080` y ejecuta:\n\n```sh\nnpm run start:backend\n```\n\nEl proxy de desarrollo envía las solicitudes `/api` al backend. La compilación de producción siempre utiliza `environment.production.ts`, con `useMock: false`, y espera la API bajo `/api` en el mismo origen:\n\n```sh\nnpm run build\n```\n\n## Pantallas\n\n- Inicio y comparador de entidades: `/lenders`.\n- Sobre nosotros: `/sobre-nosotros`; textos legales: `/legal/{texto}`.\n- Test de préstamos: `/herramientas/test-prestamos`.\n- Calculadora TAE: `/herramientas/calculadora-tae`.\n- Cómo funciona: `/como-funciona`.\n- Blog: `/blog`.\n- Contacto: `/contacto`.\n- Simulador avanzado: `/loan-simulator`.\n- Solicitud de ofertas: `/applications`.\n- Tipos de préstamo: `/loan-types`.\n\n## Conexión con otras capas\n\nEl frontend sirve en `http://localhost:4200` y llama exclusivamente a la API pública del backend, que escucha en el puerto `8080` con el prefijo `/api`. Configura `FRONT_URL=http://localhost:4200` en el backend para permitir ese origen. El backend utiliza Firestore; para desarrollo, su emulador escucha en `127.0.0.1:8085` con el proyecto `demo-app` y las variables `FIREBASE_PROJECT_ID` y `FIRESTORE_EMULATOR_HOST`. El frontend no se conecta directamente a Firestore.\n"
 }
