@@ -1,8 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
 
-/* Variables de compatibilidad para los estilos fijos de la arquitectura.
-   La paleta y los componentes de Aurora se incorporan en el bloque de marca. */
 :root {
+  /* Compatibilidad con las clases y componentes fijos de la arquitectura. */
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-600);
   --color-accent: var(--accent);
@@ -16,13 +15,20 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-danger: var(--error);
-  --font-sans: var(--font-body);
+  --color-error: var(--error);
+  --font-family-base: var(--font-body);
+  --font-family-heading: var(--font-display);
   --space-xs: var(--space-1);
   --space-sm: var(--space-2);
   --space-md: var(--space-4);
   --space-lg: var(--space-5);
-  --space-xl: var(--space-7);
+  --space-xl: var(--space-6);
+  --space-2xl: var(--space-8);
   --radius: var(--radius-md);
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --shadow: var(--shadow-sm);
 }
 
 /* brand-style:start — CSS de la guía de estilos, copiado tal cual al generar (no editar a mano) */

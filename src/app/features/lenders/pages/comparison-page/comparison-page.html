@@ -1,0 +1,32 @@
+<main class="comparison">
+  <nav aria-label="Migas de pan"><a routerLink="..">Inicio</a> › Comparador de entidades</nav>
+  <header class="comparison__intro"><span class="eyebrow">COMPARA CON CLARIDAD</span><h1>Comparador de préstamos</h1><p class="lead">Explora las entidades disponibles y compara el coste estimado según el importe y plazo que elijas.</p><p>✓ Comparar es gratis y no afecta a tu historial crediticio.</p></header>
+  <button class="btn btn--secondary comparison__toggle" type="button" [attr.aria-expanded]="filtersOpen()" aria-controls="comparison-filters" (click)="toggleFilters()">Filtros ({{ activeCount() }})</button>
+  <div class="comparison__grid">
+    <aside id="comparison-filters" class="calculator comparison__filters" [class.comparison__filters--open]="filtersOpen()" aria-label="Filtros de entidades"><h2>Filtrar</h2><form [formGroup]="form" (ngSubmit)="apply()" novalidate>
+      <div class="field"><label class="field__label" for="filter-amount">Importe que necesitas</label><input class="input" id="filter-amount" type="number" min="50" max="2000" step="50" formControlName="amount" [attr.aria-invalid]="errorFor('amount') ? 'true' : null" [attr.aria-describedby]="errorFor('amount') ? 'amount-error' : 'amount-hint'" /><span class="field__hint" id="amount-hint">De 50 € a 2.000 €</span>@if (errorFor('amount'); as error) { <span class="field__error" id="amount-error">{{ error }}</span> }</div>
+      <div class="field"><label class="field__label" for="filter-term">Plazo en días</label><input class="input" id="filter-term" type="number" min="7" max="90" step="1" formControlName="termDays" [attr.aria-invalid]="errorFor('termDays') ? 'true' : null" [attr.aria-describedby]="errorFor('termDays') ? 'term-error' : 'term-hint'" /><span class="field__hint" id="term-hint">De 7 a 90 días</span>@if (errorFor('termDays'); as error) { <span class="field__error" id="term-error">{{ error }}</span> }</div>
+      <div class="field"><label class="field__label" for="filter-age">Tu edad</label><input class="input" id="filter-age" type="number" min="18" max="100" step="1" formControlName="age" [attr.aria-invalid]="errorFor('age') ? 'true' : null" [attr.aria-describedby]="errorFor('age') ? 'age-error' : null" />@if (errorFor('age'); as error) { <span class="field__error" id="age-error">{{ error }}</span> }</div>
+      <fieldset class="comparison__checks"><legend>Condiciones especiales</legend><label><input type="checkbox" formControlName="firstLoanFree" /> Primer préstamo gratis</label><label><input type="checkbox" formControlName="acceptsAsnef" /> Aceptan ASNEF</label><label><input type="checkbox" formControlName="noPayslip" /> Sin nómina</label></fieldset>
+      <button class="btn btn--solid btn--block" type="submit">Aplicar filtros →</button><button class="comparison__clear" type="button" (click)="clear()">Limpiar filtros</button>
+    </form><p class="comparison__hint">Tus filtros quedan en la dirección de esta página para compartir la búsqueda.</p></aside>
+    <section class="comparison__results" aria-label="Resultados de la comparación">
+      <div class="comparison__result-head"><h2>@let listing = state(); @if (listing.status === 'ready') { {{ listing.data.totalItems }} {{ listing.data.totalItems === 1 ? 'entidad encaja con tu búsqueda' : 'entidades encajan con tu búsqueda' }} } @else { Entidades disponibles }</h2><div class="field"><label class="field__label" for="lender-order">Ordenar por</label><select id="lender-order" class="select" [formControl]="form.controls.order"><option value="recommended">Recomendadas</option><option value="total" [disabled]="!form.controls.amount.value || !form.controls.termDays.value || !!errorFor('amount') || !!errorFor('termDays')">Menor total a devolver</option><option value="maxAmount">Mayor importe máximo</option><option value="response">Respuesta más rápida</option></select></div></div>
+      @if (errors().amount || errors().termDays || errors().age) { <p role="alert">Corrige los filtros indicados para consultar entidades.</p> } @else {
+        @let results = state();
+        @switch (results.status) {
+          @case ('loading') { <div class="comparison__waiting" aria-busy="true"><app-loading-state message="Cargando entidades…" /></div> }
+          @case ('error') { <app-error-alert message="No pudimos cargar las entidades." retryLabel="Reintentar" (retry)="reload()" /> }
+          @case ('empty') { <app-empty-state message="Ninguna entidad cumple todos tus filtros." /><button type="button" class="btn btn--secondary" (click)="clear()">Limpiar filtros</button> }
+          @case ('ready') {
+            @if (results.data.items.length === 0) { <app-empty-state message="Ninguna entidad cumple todos tus filtros." /><button type="button" class="btn btn--secondary" (click)="clear()">Limpiar filtros</button> }
+            @else { @for (lender of results.data.items; track lender.id) { <app-lender-card [lender]="lender" [amount]="request().filters.amount" [termDays]="request().filters.termDays" [requestAmount]="requestAmount()" [requestTermDays]="requestTerm()" [applicationRoute]="applicationRoute" /> }
+              @if (results.data.totalPages > 1) { <nav class="pagination" aria-label="Páginas de entidades"><button class="btn btn--secondary" type="button" [disabled]="results.data.page === 0" (click)="goToPage(results.data.page - 1)">Anterior</button><span>Página {{ results.data.page + 1 }} de {{ results.data.totalPages }}</span><button class="btn btn--secondary" type="button" [disabled]="results.data.page + 1 >= results.data.totalPages" (click)="goToPage(results.data.page + 1)">Siguiente</button></nav> }
+            }
+          }
+        }
+      }
+      <p class="comparison__notice">Datos informativos actualizados por Credara. Las condiciones finales las fija cada entidad y están sujetas a su aprobación. Credara puede recibir una comisión de las entidades, sin coste para ti.</p>
+    </section>
+  </div>
+</main>

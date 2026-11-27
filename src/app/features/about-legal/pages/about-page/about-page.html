@@ -1,0 +1,39 @@
+<main class="about-page" id="sobre-nosotros">
+  <nav class="breadcrumbs" aria-label="Migas de pan"><span>Inicio</span><span aria-hidden="true">›</span><span aria-current="page">Sobre nosotros</span></nav>
+  <section class="about-intro" aria-labelledby="about-title">
+    <span class="eyebrow">CONOCE CREDARA</span>
+    <h1 id="about-title">Elegir un préstamo debería ser <span class="text-gradient">más sencillo.</span></h1>
+    <p class="lead">Ayudamos a comparar préstamos con información clara desde 2024.</p>
+    <p class="lead">En Credara te ayudamos a entender el coste de la financiación y a comparar opciones antes de decidir. Somos un comparador independiente: no concedemos préstamos.</p>
+    <div class="about-grid">
+      <article class="card about-card"><span class="icon-chip" aria-hidden="true">✓</span><h2>Misión</h2><p>Que nadie pida un préstamo sin saber lo que va a pagar.</p></article>
+      <article class="card about-card"><span class="icon-chip icon-chip--pink" aria-hidden="true">€</span><h2>Cómo ganamos dinero</h2><p>Las entidades nos pagan por cada solicitud que les presentamos. Para ti es gratis.</p></article>
+      <article class="card about-card"><span class="icon-chip icon-chip--teal" aria-hidden="true">◇</span><h2>Independencia</h2><p>El orden de las ofertas sigue el total a devolver, no la comisión.</p></article>
+    </div>
+    <span class="btn btn--secondary about-contact" aria-disabled="true">Contactar con nosotros</span>
+  </section>
+  <section class="legal-preview" id="textos-legales" aria-labelledby="legal-title">
+    <span class="eyebrow">INFORMACIÓN Y TRANSPARENCIA</span>
+    <h2 id="legal-title">Textos legales</h2>
+    <p>Consulta cómo funciona el servicio y cómo tratamos tus datos.</p>
+    <div class="legal-preview__grid">
+      <aside class="card legal-preview__menu" aria-label="Menú de textos legales">
+        <strong>DOCUMENTOS</strong>
+        <nav aria-label="Documentos legales">
+          @for (document of documents; track document.slug) {
+            <a [routerLink]="['legal', document.slug]" [attr.aria-current]="document.slug === preview.slug ? 'page' : null" [class.is-active]="document.slug === preview.slug">{{ document.title }}</a>
+          }
+        </nav>
+      </aside>
+      <article class="card legal-preview__document" aria-labelledby="privacy-preview-title">
+        <span class="badge">DOCUMENTO LEGAL</span>
+        <h3 id="privacy-preview-title">{{ preview.title }}</h3>
+        <p class="legal-preview__date">Última actualización: {{ preview.updatedAt }}</p>
+        @for (section of preview.sections; track section.heading; let index = $index) {
+          <section><h4>{{ index + 1 }}. {{ section.heading }}</h4><p>{{ section.paragraphs[0] }}</p></section>
+        }
+        <a class="btn btn--secondary btn--sm" [routerLink]="['legal', preview.slug]">Leer documento completo →</a>
+      </article>
+    </div>
+  </section>
+</main>

@@ -1,0 +1,53 @@
+<main class="application-page">
+  <div class="application-page__inner">
+    <nav class="breadcrumbs" aria-label="Migas de pan"><a routerLink="/lenders">Inicio</a><span aria-hidden="true">›</span><span>Solicitud de ofertas</span></nav>
+    <span class="eyebrow">● Solicitud de ofertas</span>
+    <h1>Descubre tus <span class="text-gradient">ofertas de préstamo</span></h1>
+    <p class="application-page__lead">Completa tus datos para encontrar entidades que se ajusten a tu solicitud. Sin compromiso y sin coste para ti.</p>
+    <ol class="request-steps" aria-label="Progreso de la solicitud">
+      <li [class.request-steps__active]="stage() === 'form'" [attr.aria-current]="stage() === 'form' ? 'step' : null"><span>1</span>Tus datos</li>
+      <li [class.request-steps__active]="stage() === 'analysis' || stage() === 'offer-error'" [attr.aria-current]="stage() === 'analysis' ? 'step' : null"><span>2</span>Análisis</li>
+      <li [class.request-steps__active]="stage() === 'offers' || stage() === 'empty'" [attr.aria-current]="stage() === 'offers' || stage() === 'empty' ? 'step' : null"><span>3</span>Ofertas</li>
+    </ol>
+
+    <div class="request-layout">
+      <div class="request-layout__main">
+        @switch (stage()) {
+          @case ('form') {
+            <section class="request-card" aria-labelledby="contact-title">
+              <div class="request-card__heading"><span class="icon-chip" aria-hidden="true">♙</span><div><h2 id="contact-title">Cuéntanos un poco sobre ti</h2><p>Los campos marcados con * son obligatorios.</p></div></div>
+              <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+                <div class="request-fields">
+                  <div class="field"><label class="field__label" for="application-name">Nombre y apellidos *</label><input class="input" id="application-name" type="text" autocomplete="name" placeholder="Ej. Lucía García López" formControlName="name" [attr.aria-invalid]="errorFor('name') ? 'true' : null" [attr.aria-describedby]="errorFor('name') ? 'name-error' : null">@if (errorFor('name'); as message) { <span class="field__error" id="name-error">{{ message }}</span> }</div>
+                  <div class="field"><label class="field__label" for="application-birth">Fecha de nacimiento *</label><input class="input" id="application-birth" type="date" autocomplete="bday" formControlName="birthDate" [attr.aria-invalid]="errorFor('birthDate') ? 'true' : null" [attr.aria-describedby]="errorFor('birthDate') ? 'birth-error' : null">@if (errorFor('birthDate'); as message) { <span class="field__error" id="birth-error">{{ message }}</span> }</div>
+                  <div class="field"><label class="field__label" for="application-mobile">Teléfono móvil *</label><div class="mobile-field"><span aria-hidden="true">+34</span><input id="application-mobile" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="9" placeholder="612345678" formControlName="mobile" [attr.aria-invalid]="errorFor('mobile') ? 'true' : null" [attr.aria-describedby]="errorFor('mobile') ? 'mobile-error' : null"></div>@if (errorFor('mobile'); as message) { <span class="field__error" id="mobile-error">{{ message }}</span> }</div>
+                  <div class="field"><label class="field__label" for="application-email">Correo electrónico *</label><input class="input" id="application-email" type="email" autocomplete="email" placeholder="lucia@ejemplo.es" formControlName="email" [attr.aria-invalid]="errorFor('email') ? 'true' : null" [attr.aria-describedby]="errorFor('email') ? 'email-error' : null">@if (errorFor('email'); as message) { <span class="field__error" id="email-error">{{ message }}</span> }</div>
+                  <div class="field"><label class="field__label" for="application-employment">Situación laboral *</label><select class="select" id="application-employment" formControlName="employmentStatus" [attr.aria-invalid]="errorFor('employmentStatus') ? 'true' : null" [attr.aria-describedby]="errorFor('employmentStatus') ? 'employment-error' : null"><option value="">Selecciona tu situación</option>@for (option of employmentOptions; track option.value) { <option [value]="option.value">{{ option.label }}</option> }</select>@if (errorFor('employmentStatus'); as message) { <span class="field__error" id="employment-error">{{ message }}</span> }</div>
+                  <fieldset class="field asnef-field" [attr.aria-invalid]="errorFor('asnefStatus') ? 'true' : null" [attr.aria-describedby]="errorFor('asnefStatus') ? 'asnef-error' : null"><legend class="field__label">¿Estás en ASNEF? *</legend><div class="asnef-field__choices"><label><input type="radio" formControlName="asnefStatus" value="NO">No</label><label><input type="radio" formControlName="asnefStatus" value="SI">Sí</label><label><input type="radio" formControlName="asnefStatus" value="NO_SE">No lo sé</label></div>@if (errorFor('asnefStatus'); as message) { <span class="field__error" id="asnef-error">{{ message }}</span> }</fieldset>
+                </div>
+                <div class="consent"><strong>Tus datos, bajo tu control</strong><div class="consent__row"><input id="application-privacy" type="checkbox" formControlName="privacyAccepted" [attr.aria-invalid]="errorFor('privacyAccepted') ? 'true' : null" [attr.aria-describedby]="errorFor('privacyAccepted') ? 'privacy-error' : null"><div><label for="application-privacy">He leído y acepto la </label><a routerLink="/about-us/legal/privacidad" target="_blank" rel="noopener noreferrer">Política de privacidad</a><span> y los </span><a routerLink="/about-us/legal/terminos-y-condiciones" target="_blank" rel="noopener noreferrer">Términos y condiciones</a><span>. *</span>@if (errorFor('privacyAccepted'); as message) { <span class="field__error" id="privacy-error">{{ message }}</span> }</div></div><label class="consent__row"><input type="checkbox" formControlName="marketingAccepted"><span>Quiero recibir ofertas y novedades por correo. Opcional.</span></label></div>
+                @if (submitError(); as message) { <app-error-alert [message]="message" /> }
+                <button class="btn btn--solid request-card__submit" type="submit" [disabled]="saving()">{{ saving() ? 'Buscando…' : 'Ver mis ofertas →' }}</button>
+                <p class="request-card__note">🔒 Conexión protegida con SSL 256-bit. * Campos obligatorios.</p>
+                <p class="request-card__note">La solicitud no garantiza su aprobación.</p>
+              </form>
+            </section>
+          }
+          @case ('analysis') {
+            <section class="request-card analysis" aria-live="polite"><span class="icon-chip" aria-hidden="true">✦</span><h2>Estamos buscando tus ofertas…</h2><p>Comparamos entidades que pueden ajustarse a tu solicitud.</p><progress [value]="progress()" max="3" aria-label="Progreso del análisis"></progress><ol><li [class.analysis__done]="progress() >= 1">{{ progress() >= 1 ? '✓' : '○' }} Analizando tu perfil</li><li [class.analysis__done]="progress() >= 2">{{ progress() >= 2 ? '✓' : '○' }} Comparando entidades</li><li [class.analysis__done]="progress() >= 3">{{ progress() >= 3 ? '✓' : '○' }} Preparando ofertas</li></ol></section>
+          }
+          @case ('offer-error') {
+            <section class="request-card" aria-live="polite"><h2>No pudimos cargar tus ofertas.</h2><p>{{ offerError() }}</p><button class="btn btn--solid" type="button" (click)="retryOffers()">Reintentar</button></section>
+          }
+          @case ('empty') {
+            <section class="request-card" aria-live="polite"><h2>No encontramos ofertas para tu solicitud</h2><p>Prueba con otro importe o plazo: muchas entidades tienen límites para clientes nuevos.</p><a class="btn btn--solid" routerLink="/lenders" fragment="calculadora">Modificar solicitud</a></section>
+          }
+          @case ('offers') {
+            <section aria-labelledby="offers-title" class="offers" aria-live="polite"><h2 id="offers-title">¡Tenemos {{ offers().length }} {{ offers().length === 1 ? 'oferta' : 'ofertas' }} para ti!</h2><p>Ordenadas de menor a mayor total a devolver. Puedes solicitar en varias entidades sin compromiso.</p>@if (clickError(); as message) { <app-error-alert [message]="message" /> }<div class="offers__list">@for (offer of offers(); track offer.lenderId; let first = $first) { <article class="card offer-card"><div class="offer-card__heading"><span class="offer-card__initials" aria-hidden="true">{{ offer.initials }}</span><div><h3>{{ offer.name }}</h3>@if (first) { <span class="badge badge--gradient">Mejor oferta</span> } @if (offer.firstLoanFree) { <span class="badge badge--success">1.er préstamo 0 %</span> } @if (visited().includes(offer.lenderId)) { <span class="badge">Ya visitaste esta entidad</span> }</div></div><dl class="offer-card__details"><div><dt>Importe</dt><dd>{{ offer.amount | currency:'EUR':'symbol':'1.0-0' }}</dd></div><div><dt>Total a devolver</dt><dd>{{ offer.totalNew | currency:'EUR':'symbol':'1.0-0' }}</dd>@if (offer.totalReturning !== offer.totalNew) { <small>Si ya fuiste cliente: {{ offer.totalReturning | currency:'EUR':'symbol':'1.0-0' }}</small> }</div><div><dt>Respuesta</dt><dd>{{ responseTime(offer.responseMinutes) }}</dd></div></dl><button class="btn btn--solid" type="button" [disabled]="clicking() !== null" (click)="visit(offer)">{{ clicking() === offer.lenderId ? 'Abriendo…' : 'Ir a la entidad ↗' }}</button></article> }</div><p class="offers__disclaimer">Las ofertas son orientativas: la entidad confirma las condiciones tras estudiar tu solicitud y puede rechazarla.</p></section>
+          }
+        }
+      </div>
+      <aside class="calculator request-summary" aria-label="Resumen de tu préstamo"><div class="request-summary__heading"><span class="icon-chip" aria-hidden="true">▣</span><div><h2>Tu préstamo</h2><small>Resumen de la simulación</small></div></div><div class="calculator__result"><span>Importe solicitado</span><div class="calculator__amount">{{ loan().amount | currency:'EUR':'symbol':'1.0-0' }}</div></div><dl class="request-summary__details"><div><dt>Plazo</dt><dd>{{ loan().termDays }} días</dd></div><div><dt>Intereses (cliente nuevo)</dt><dd>{{ loan().newCustomer.interest | currency:'EUR':'symbol':'1.0-0' }}</dd></div><div><dt>Total a devolver</dt><dd>{{ loan().newCustomer.total | currency:'EUR':'symbol':'1.0-0' }}</dd></div><div><dt>Devolución</dt><dd>{{ loan().repaymentDate | date:'dd/MM/yyyy' }}</dd></div></dl><a class="btn btn--secondary request-summary__modify" routerLink="/lenders" fragment="calculadora">Modificar solicitud</a><p>Cada entidad determinará sus condiciones según tu perfil. Podrás comparar el coste total antes de ir a su sitio web.</p></aside>
+    </div>
+  </div>
+</main>
