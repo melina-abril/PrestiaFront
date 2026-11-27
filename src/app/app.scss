@@ -1,0 +1,31 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100dvh;
+}
+
+.app-content {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: var(--space-4);
+  transform: translateY(-150%);
+  padding: var(--space-3) var(--space-5);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--primary);
+  color: var(--on-primary);
+  font: 700 var(--fs-small) var(--font-body);
+  cursor: pointer;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(var(--space-2));
+}

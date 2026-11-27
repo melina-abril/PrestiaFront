@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "layer": "frontend",
+  "kind": "structure",
+  "generatedAt": "2026-11-27T15:27:44.296Z",
+  "system": {
+    "uid": "Ki3EmRCSLkGwM3Tnlji0",
+    "name": "Credara · Comparador de préstamos online"
+  },
+  "architecture": {
+    "name": "Angular 22 · standalone + signals",
+    "stack": "angular"
+  },
+  "repositoryPath": "https://github.com/melina-abril/PrestiaFront",
+  "ports": [
+    {
+      "port": 4200,
+      "file": "angular.json"
+    }
+  ],
+  "environment": [],
+  "modules": [],
+  "shared": [],
+  "frontend": {
+    "apiBaseUrls": [
+      {
+        "file": "src/environments/environment.backend.ts",
+        "value": "/api"
+      },
+      {
+        "file": "src/environments/environment.production.ts",
+        "value": "/api"
+      },
+      {
+        "file": "src/environments/environment.ts",
+        "value": "/api"
+      }
+    ],
+    "proxies": [
+      {
+        "file": "proxy.conf.json",
+        "context": "/api",
+        "target": "http://localhost:8080"
+      }
+    ],
+    "useMock": true,
+    "consumedEndpoints": []
+  },
+  "relations": [
+    "Backend: el front arma cada llamada con apiBaseUrl /api (src/environments/environment.backend.ts), /api (src/environments/environment.production.ts), /api (src/environments/environment.ts) + el path del servicio.",
+    "Backend: en desarrollo el front redirige /api → http://localhost:8080: el backend tiene que levantar ahí.",
+    "Backend: el front levanta en el puerto 4200: ese origen va en la configuración de CORS del backend.",
+    "Backend: el front todavía no consume endpoints.",
+    "useMock está en true: el front todavía responde con datos mock."
+  ],
+  "readme": "# Credara · Comparador de préstamos online\n\nFrontend público desarrollado con Angular 22. Esta estructura inicial muestra una página de bienvenida; los módulos de las funcionalidades se incorporarán después.\n\n## Desarrollo\n\nRequiere Node.js compatible con Angular 22.\n\n```sh\nnpm install\nnpm start\n```\n\n`npm start` utiliza la configuración de desarrollo con mocks. Para conectar el frontend con la API local, inicia el backend por separado y ejecuta:\n\n```sh\nnpm run start:backend\n```\n\nEl frontend escucha en `http://localhost:4200`. Su proxy envía las peticiones bajo `/api` al backend en `http://localhost:8080`; no accede directamente a Firestore. El backend usa el proyecto `demo-app` y el emulador de Firestore en `127.0.0.1:8085` durante el desarrollo. Consulta el README de la base de datos para iniciar y cargar ese emulador. Configura `FRONT_URL=http://localhost:4200` en el backend para permitir el origen del frontend.\n\n```sh\nnpm run build\n```\n\nLa compilación de producción utiliza `environment.production.ts`: desactiva los mocks y llama a la API bajo `/api` en el mismo origen. El despliegue debe dirigir ese prefijo al backend. No se requiere inicio de sesión.\n\n## Módulos\n\nTodavía no hay módulos de funcionalidades en esta estructura inicial.\n"
+}
