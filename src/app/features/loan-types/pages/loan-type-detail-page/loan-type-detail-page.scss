@@ -1,0 +1,203 @@
+:host {
+  display: block;
+}
+
+.loan-detail {
+  width: 100%;
+  padding: var(--space-7) var(--gutter) var(--space-8);
+  background: var(--background);
+}
+
+.loan-detail__breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  color: var(--text-secondary);
+  font-size: var(--fs-small);
+}
+
+.loan-detail__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+  align-items: center;
+  gap: var(--space-5);
+  padding: clamp(24px, 4vw, 48px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--gradient-hero);
+}
+
+.loan-detail__hero h1 {
+  margin-bottom: var(--space-4);
+}
+
+.loan-detail__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.loan-detail__simulation {
+  padding: var(--space-5);
+  box-shadow: var(--shadow-md);
+}
+
+.loan-detail__simulation h2,
+.loan-detail__information h2 {
+  font-size: var(--fs-h3);
+}
+
+.loan-detail__simulation strong {
+  display: block;
+  margin-bottom: var(--space-5);
+  color: var(--primary);
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+}
+
+.loan-detail__small {
+  margin: var(--space-4) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--fs-small);
+}
+
+.loan-detail__section {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-7);
+}
+
+.loan-detail__section h2 {
+  margin: 0;
+}
+
+.loan-detail__section-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.loan-detail__offers {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.loan-detail__offer {
+  display: grid;
+  grid-template-columns: minmax(190px, 1.4fr) minmax(135px, 1fr) minmax(145px, 1fr) auto;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.loan-detail__offer small,
+.loan-detail__offer strong {
+  display: block;
+}
+
+.loan-detail__offer small {
+  color: var(--text-secondary);
+}
+
+.loan-detail__lender {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.loan-detail__lender h3 {
+  margin: 0 0 var(--space-1);
+  font-size: var(--fs-body);
+}
+
+.loan-detail__initials {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: var(--soft-background);
+  color: var(--primary);
+  font-weight: 800;
+}
+
+.loan-detail__information {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+  margin-top: var(--space-7);
+}
+
+.loan-detail__pros-cons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+
+.loan-detail__pros-cons ul {
+  padding-left: var(--space-5);
+  color: var(--text-secondary);
+}
+
+.loan-detail__related {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.loan-detail__related a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 60px;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.loan-detail__related a:hover {
+  border-color: var(--primary-300);
+  color: var(--primary);
+}
+
+.loan-detail__missing {
+  padding: var(--space-7);
+  border-radius: var(--radius-xl);
+  background: var(--soft-background);
+}
+
+@media (max-width: 900px) {
+  .loan-detail__hero,
+  .loan-detail__information {
+    grid-template-columns: 1fr;
+  }
+
+  .loan-detail__offer {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .loan-detail__offer,
+  .loan-detail__pros-cons,
+  .loan-detail__related {
+    grid-template-columns: 1fr;
+  }
+
+  .loan-detail__offer .btn {
+    width: 100%;
+  }
+}

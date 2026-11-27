@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "layer": "frontend",
   "kind": "features",
-  "generatedAt": "2026-11-27T14:06:48.733Z",
+  "generatedAt": "2026-11-27T14:12:50.951Z",
   "system": {
     "uid": "Ki3EmRCSLkGwM3Tnlji0",
     "name": "Credara · Comparador de préstamos online"
@@ -20,6 +20,48 @@
   ],
   "environment": [],
   "modules": [
+    {
+      "moduleName": "loan-types",
+      "title": "Tipos de préstamo",
+      "featureKeys": [
+        "98ad01a1-aa1d-4d92-8771-cacee72cd586"
+      ],
+      "services": [
+        {
+          "method": "GET",
+          "path": "/api/loan-types",
+          "name": "listLoanTypes",
+          "description": "Devuelve los tipos de préstamo activos ordenados."
+        },
+        {
+          "method": "GET",
+          "path": "/api/loan-types/:slug",
+          "name": "getLoanType",
+          "description": "Devuelve el contenido del tipo, sus relacionados y las entidades que cumplen su criterio."
+        }
+      ]
+    },
+    {
+      "moduleName": "blog",
+      "title": "Blog de finanzas personales",
+      "featureKeys": [
+        "3f98e247-aa9c-4c28-a1c0-7297215ad3c6"
+      ],
+      "services": [
+        {
+          "method": "GET",
+          "path": "/api/articles",
+          "name": "listArticles",
+          "description": "Devuelve artículos publicados, filtrados opcionalmente por categoría y paginados de a nueve."
+        },
+        {
+          "method": "GET",
+          "path": "/api/articles/:slug",
+          "name": "getArticle",
+          "description": "Devuelve un artículo publicado con sus secciones depuradas y artículos relacionados."
+        }
+      ]
+    },
     {
       "moduleName": "lenders",
       "title": "Inicio y comparador de entidades",
@@ -117,6 +159,34 @@
     "useMock": true,
     "consumedEndpoints": [
       {
+        "moduleName": "loan-types",
+        "method": "GET",
+        "path": "/api/loan-types",
+        "name": "listLoanTypes",
+        "description": "Devuelve los tipos de préstamo activos ordenados."
+      },
+      {
+        "moduleName": "loan-types",
+        "method": "GET",
+        "path": "/api/loan-types/:slug",
+        "name": "getLoanType",
+        "description": "Devuelve el contenido del tipo, sus relacionados y las entidades que cumplen su criterio."
+      },
+      {
+        "moduleName": "blog",
+        "method": "GET",
+        "path": "/api/articles",
+        "name": "listArticles",
+        "description": "Devuelve artículos publicados, filtrados opcionalmente por categoría y paginados de a nueve."
+      },
+      {
+        "moduleName": "blog",
+        "method": "GET",
+        "path": "/api/articles/:slug",
+        "name": "getArticle",
+        "description": "Devuelve un artículo publicado con sus secciones depuradas y artículos relacionados."
+      },
+      {
         "moduleName": "lenders",
         "method": "GET",
         "path": "/api/lenders",
@@ -150,8 +220,8 @@
     "Backend: el front arma cada llamada con apiBaseUrl /api (src/environments/environment.backend.ts), /api (src/environments/environment.production.ts), /api (src/environments/environment.ts) + el path del servicio.",
     "Backend: en desarrollo el front redirige /api → http://localhost:8080: el backend tiene que levantar ahí.",
     "Backend: el front levanta en el puerto 4200: ese origen va en la configuración de CORS del backend.",
-    "Backend: el front consume 4 endpoints (frontend.consumedEndpoints); cualquier cambio de method, path o forma de los DTOs lo rompe.",
+    "Backend: el front consume 8 endpoints (frontend.consumedEndpoints); cualquier cambio de method, path o forma de los DTOs lo rompe.",
     "useMock está en true: el front todavía responde con datos mock."
   ],
-  "readme": "# Credara · Comparador de préstamos online\n\nFrontend público desarrollado con Angular 22. No requiere cuenta ni inicio de sesión.\n\n## Desarrollo\n\nRequiere Node.js compatible con Angular 22. Para iniciar la aplicación con respuestas de ejemplo:\n\n```sh\nnpm install\nnpm start\n```\n\nPara usar el backend local, inicia primero su API en el puerto `8080` y ejecuta:\n\n```sh\nnpm run start:backend\n```\n\nEl servidor de desarrollo publica el frontend en `http://localhost:4200` y envía las peticiones `/api` al backend mediante `proxy.conf.json`. El backend debe admitir ese origen mediante `FRONT_URL=http://localhost:4200`.\n\n`npm run build` genera la versión de producción con `useMock: false`. En producción, sirve el frontend y la API bajo el mismo origen para que las peticiones a `/api` lleguen al backend.\n\n## Módulos\n\n- **Inicio y comparador de entidades** (`/lenders`): consulta las entidades y las ofertas destacadas.\n- **Simulador avanzado** (`/loan-simulator`): calcula los costes en el navegador.\n- **Solicitud de ofertas** (`/applications`): envía la solicitud, consulta ofertas y registra la entidad elegida.\n- **Sobre nosotros y textos legales** (`/about-us`): contenido público.\n\n## Conexión con las otras capas\n\nEl frontend consume únicamente la API del backend bajo `/api`, en el puerto `8080` durante el desarrollo. No accede directamente a Firestore: el backend se conecta a su emulador en `127.0.0.1:8085` con el proyecto `demo-app`. La configuración del frontend está en los archivos fijos de `src/environments/`; `npm start` usa mocks, mientras que `npm run start:backend` usa el proxy hacia la API.\n"
+  "readme": "# Credara · Comparador de préstamos online\n\nSitio público en Angular 22. No requiere cuenta ni inicio de sesión.\n\n## Desarrollo\n\nRequiere Node.js compatible con Angular 22. Para iniciar con datos de ejemplo, sin backend:\n\n```sh\nnpm install\nnpm start\n```\n\nLa aplicación se sirve en `http://localhost:4200`. Para usar el backend local en vez de los mocks:\n\n```sh\nnpm run start:backend\n```\n\nEste comando usa `environment.backend.ts` y el proxy de `/api` hacia el backend en `http://localhost:8080`. El backend se conecta a Cloud Firestore; en desarrollo puede utilizar el emulador en `127.0.0.1:8085` con el proyecto `demo-app`. Consulta el README de la base de datos para iniciar el emulador y cargar los datos. El frontend no se conecta directamente a Firestore.\n\n```sh\nnpm run build\n```\n\nLa compilación de producción utiliza siempre `environment.production.ts`, con mocks desactivados y la API en el mismo origen bajo `/api`. Al desplegar, configura el servidor web para dirigir ese prefijo al backend y servir las rutas de Angular.\n\n## Módulos\n\n- Inicio y comparador de entidades: `/lenders`.\n- Tipos de préstamo: `/loan-types`.\n- Blog de finanzas personales: `/articles`.\n- Simulador avanzado: `/loan-simulator`.\n- Solicitud y presentación de ofertas: `/applications`.\n- Sobre nosotros y textos legales: `/about-us`.\n"
 }
