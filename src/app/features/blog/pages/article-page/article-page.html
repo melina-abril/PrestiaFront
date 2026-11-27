@@ -1,0 +1,65 @@
+<main class="article-page">
+  @let state = articleState();
+  @switch (state.status) {
+    @case ('loading') { <app-loading-state message="Cargando artículo…" /> }
+    @case ('error') {
+      @if (notFound()) {
+        <section class="article-page__not-found"><h1>No encontramos esta página</h1><a class="btn btn--primary" routerLink="/articles">Volver al blog →</a></section>
+      } @else {
+        <app-error-alert [message]="state.message" retryLabel="Reintentar" (retry)="retry()" />
+      }
+    }
+    @case ('empty') { <section class="article-page__not-found"><h1>No encontramos esta página</h1><a routerLink="/articles">Volver al blog →</a></section> }
+    @case ('ready') {
+      @let article = state.data;
+      <nav class="article-page__breadcrumbs" aria-label="Migas de pan"><a routerLink="/lenders">Inicio</a> › <a routerLink="/articles">Blog</a> › {{ article.title }}</nav>
+      <div class="article-page__layout">
+        <article class="article-page__main">
+          <header class="article-page__header">
+            <span class="badge">{{ article.category }}</span>
+            <h1>{{ article.title }}</h1>
+            <p>Por {{ article.author }} · {{ article.publishedAt | date: 'dd/MM/yyyy' }} · {{ article.readingMinutes }} min de lectura @if (article.updatedAt > article.publishedAt) { · Actualizado el {{ article.updatedAt | date: 'dd/MM/yyyy' }} }</p>
+          </header>
+          <div class="article-page__image"><img [src]="article.imageUrl" [alt]="article.title" /></div>
+          @for (section of article.sections; track section.id) {
+            <section [id]="section.id" class="article-page__section">
+              <h2>{{ section.title }}</h2>
+              <div class="article-page__prose" [innerHTML]="section.contentHtml"></div>
+            </section>
+          }
+          <aside class="cta-band article-page__cta">
+            <h2>Compara la TAE de tu préstamo</h2>
+            <p>Conoce el coste total antes de elegir una oferta.</p>
+            <span class="btn btn--white">Ir a la calculadora</span>
+          </aside>
+          @if (article.relatedArticles.length > 0) {
+            <section class="article-page__related" aria-labelledby="related-title">
+              <h2 id="related-title">Artículos relacionados</h2>
+              <div class="article-page__related-grid">
+                @for (related of article.relatedArticles.slice(0, 3); track related.slug) {
+                  <a class="card" [routerLink]="['/articles', related.slug]"><span class="badge">{{ related.category }}</span><h3>{{ related.title }}</h3><span>Leer artículo →</span></a>
+                }
+              </div>
+            </section>
+          }
+        </article>
+        <aside class="article-page__sidebar" aria-label="Índice y opciones para compartir">
+          <div class="card">
+            <h2>En este artículo</h2>
+            <nav aria-label="Índice de secciones">
+              @for (section of article.sections; track section.id) {
+                <button type="button" [class.article-page__active]="activeSection() === section.id" (click)="scrollTo(section.id)">{{ section.title }}</button>
+              }
+            </nav>
+            <h2>Compartir</h2>
+            <div class="article-page__share">
+              <button type="button" class="btn btn--secondary btn--sm" (click)="copyLink()">Copiar enlace</button>
+              <button type="button" class="btn btn--secondary btn--sm" (click)="shareOnWhatsApp(article.title)">WhatsApp</button>
+            </div>
+            @if (copied()) { <p role="status">Enlace copiado</p> }
+          </div>
+        </aside>
+      </div>
+    }
+  }
+</main>

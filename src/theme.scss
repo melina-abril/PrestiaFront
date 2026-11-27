@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
 
+/* El bloque brand-style:start … brand-style:end se incorpora desde el estilo de marca. */
 :root {
-  /* Compatibilidad con las clases y componentes fijos de la arquitectura. */
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-600);
   --color-accent: var(--accent);
-  --color-bg: var(--background);
   --color-background: var(--background);
+  --color-bg: var(--background);
   --color-surface: var(--surface);
   --color-surface-muted: var(--soft-background);
   --color-border: var(--border);
@@ -14,21 +14,14 @@
   --color-text-muted: var(--text-secondary);
   --color-success: var(--success);
   --color-warning: var(--warning);
-  --color-danger: var(--error);
   --color-error: var(--error);
-  --font-family-base: var(--font-body);
-  --font-family-heading: var(--font-display);
+  --color-danger: var(--error);
   --space-xs: var(--space-1);
   --space-sm: var(--space-2);
   --space-md: var(--space-4);
   --space-lg: var(--space-5);
   --space-xl: var(--space-6);
-  --space-2xl: var(--space-8);
   --radius: var(--radius-md);
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --shadow: var(--shadow-sm);
 }
 
 /* brand-style:start — CSS de la guía de estilos, copiado tal cual al generar (no editar a mano) */
