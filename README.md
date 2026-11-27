@@ -1,30 +1,37 @@
 # Credara · Comparador de préstamos online
 
-Frontend público desarrollado con Angular 22. Esta estructura inicial muestra una página de bienvenida; los módulos de las funcionalidades se incorporarán después.
+Sitio público en Angular 22. No requiere cuenta ni inicio de sesión.
 
 ## Desarrollo
 
-Requiere Node.js compatible con Angular 22.
+Requiere Node.js y npm compatibles con Angular 22.
 
 ```sh
 npm install
 npm start
 ```
 
-`npm start` utiliza la configuración de desarrollo con mocks. Para conectar el frontend con la API local, inicia el backend por separado y ejecuta:
+`npm start` sirve la aplicación con datos de ejemplo. Para conectarla a la API local, inicia primero el backend en el puerto `8080` y ejecuta:
 
 ```sh
 npm run start:backend
 ```
 
-El frontend escucha en `http://localhost:4200`. Su proxy envía las peticiones bajo `/api` al backend en `http://localhost:8080`; no accede directamente a Firestore. El backend usa el proyecto `demo-app` y el emulador de Firestore en `127.0.0.1:8085` durante el desarrollo. Consulta el README de la base de datos para iniciar y cargar ese emulador. Configura `FRONT_URL=http://localhost:4200` en el backend para permitir el origen del frontend.
+El servidor de desarrollo usa el proxy de `/api` hacia `http://localhost:8080`. El frontend se sirve en `http://localhost:4200`; configura `FRONT_URL=http://localhost:4200` en el backend para permitir ese origen. Para compilar:
 
 ```sh
 npm run build
 ```
 
-La compilación de producción utiliza `environment.production.ts`: desactiva los mocks y llama a la API bajo `/api` en el mismo origen. El despliegue debe dirigir ese prefijo al backend. No se requiere inicio de sesión.
+La compilación de producción usa `environment.production.ts`: los mocks quedan desactivados y las peticiones se hacen al mismo origen bajo `/api`. En el despliegue, dirige ese prefijo al backend.
 
 ## Módulos
 
-Todavía no hay módulos de funcionalidades en esta estructura inicial.
+- `lenders`: inicio con ofertas destacadas y comparador de entidades.
+- `loan-simulator`: simulador avanzado, calculado en el navegador.
+- `applications`: solicitud y presentación de ofertas.
+- `loan-types`: índice y páginas de tipos de préstamo.
+
+## Conexión con las otras capas
+
+El frontend consume los endpoints públicos del backend bajo `/api`: `/api/lenders`, `/api/applications` y `/api/loan-types`. El backend escucha en el puerto `8080` y utiliza Firestore; el frontend no accede directamente a la base. Para el desarrollo local de las tres capas, inicia el emulador de Firestore en `127.0.0.1:8085` con el proyecto `demo-app`, después el backend y por último `npm run start:backend`.

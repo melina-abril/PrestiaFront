@@ -1,0 +1,88 @@
+<main class="type-detail">
+  @let state = detailState();
+  @switch (state.status) {
+    @case ('loading') {
+      <div class="type-detail__loading" role="status" aria-busy="true">
+        <div class="type-detail__placeholder"></div>
+        <div class="type-detail__placeholder"></div>
+        <p>Cargando la guía y las entidades…</p>
+      </div>
+    }
+    @case ('error') {
+      @if (state.message === 'NOT_FOUND') {
+        <section class="type-detail__not-found" aria-labelledby="not-found-title">
+          <span class="eyebrow">ERROR 404</span>
+          <h1 id="not-found-title">No encontramos esta página</h1>
+          <p>Puede que este tipo de préstamo ya no esté disponible.</p>
+          <a class="btn btn--primary" routerLink="/loan-types">Ver tipos de préstamo <span aria-hidden="true">→</span></a>
+        </section>
+      } @else {
+        <app-error-alert [message]="state.message" retryLabel="Reintentar" (retry)="reload()" />
+      }
+    }
+    @case ('empty') {
+      <app-error-alert message="No encontramos esta página" />
+    }
+    @case ('ready') {
+      @let type = state.data;
+      <nav class="breadcrumbs" aria-label="Migas de pan">
+        <span>Inicio</span><span aria-hidden="true">/</span>
+        <a routerLink="/loan-types">Préstamos</a><span aria-hidden="true">/</span>
+        <span aria-current="page">{{ type.title }}</span>
+      </nav>
+      <section class="type-hero" aria-labelledby="type-title">
+        <div>
+          <span class="eyebrow">GUÍA DE PRÉSTAMOS · ESPAÑA</span>
+          <h1 id="type-title">{{ type.title }}: <span class="text-gradient">compara antes de decidir</span></h1>
+          <p class="lead">{{ type.subtitle }}</p>
+          <div class="type-hero__tags">
+            @for (tag of type.tags; track tag) { <span class="badge badge--success">✓ {{ tag }}</span> }
+          </div>
+          <button class="btn btn--solid" type="button" (click)="scrollTo('entities')">Ver entidades compatibles <span aria-hidden="true">→</span></button>
+          <p class="type-hero__note">Comparar en Credara es gratis. No concedemos préstamos.</p>
+        </div>
+        <aside class="card type-hero__aside" aria-label="Tu simulación">
+          <span class="icon-chip icon-chip--gradient" aria-hidden="true">€</span>
+          <h2>¿Cuánto necesitas?</h2>
+          <p class="type-hero__amount">{{ amount() }} €</p>
+          <p>Importe de tu última simulación. La entidad confirma las condiciones finales.</p>
+          <a class="btn btn--primary" routerLink="/applications" [queryParams]="{ amount: amount() }">Ver mis ofertas <span aria-hidden="true">→</span></a>
+        </aside>
+      </section>
+      <section id="entities" class="entities-section" aria-labelledby="entities-title">
+        <div class="entities-section__heading">
+          <div><span class="eyebrow">OPCIONES PARA ESTE TIPO</span><h2 id="entities-title">Entidades que ofrecen {{ type.title.toLowerCase() }} ({{ type.lenders.length }})</h2></div>
+          <a routerLink="/lenders">Abrir comparador completo →</a>
+        </div>
+        @if (type.lenders.length === 0) {
+          <div class="card entities-section__empty">
+            <p>Ahora no hay entidades para este tipo de préstamo.</p>
+            <a class="btn btn--secondary" routerLink="/lenders">Ver el comparador</a>
+          </div>
+        } @else {
+          <div class="entities-section__list">
+            @for (lender of type.lenders; track lender.id) {
+              <article class="entity-card">
+                <div class="entity-card__brand"><span class="entity-card__initials" aria-hidden="true">{{ lender.initials }}</span><div><h3>{{ lender.name }}</h3><span class="badge badge--success">Solicitud online</span></div></div>
+                <div><span class="entity-card__label">Importe</span><strong>{{ lender.minAmount }} € – {{ lender.maxAmount }} €</strong></div>
+                <div><span class="entity-card__label">Plazo</span><strong>{{ lender.minTermDays }} – {{ lender.maxTermDays }} días</strong></div>
+                <a class="btn btn--secondary btn--sm" routerLink="/applications">Consultar →</a>
+              </article>
+            }
+          </div>
+        }
+        <p class="entities-section__disclaimer">La entidad decide la aprobación según su análisis de riesgo. Credara no garantiza la concesión. Comprueba siempre la información precontractual antes de aceptar.</p>
+      </section>
+      <section class="detail-grid" aria-label="Información del préstamo">
+        <div class="card"><span class="eyebrow">LO ESENCIAL</span><h2>Requisitos habituales</h2><ul class="check-list">@for (requirement of type.requirements; track requirement) { <li>{{ requirement }}</li> }</ul><p>Cada entidad establece sus propios criterios de evaluación.</p></div>
+        <div class="card"><span class="eyebrow">DECIDE CON INFORMACIÓN</span><h2>Ventajas e inconvenientes</h2><div class="detail-grid__points"><div><span class="badge badge--success">Ventajas</span><ul>@for (advantage of type.advantages; track advantage) { <li>✓ {{ advantage }}</li> }</ul></div><div><span class="badge badge--warning">Ten en cuenta</span><ul>@for (disadvantage of type.disadvantages; track disadvantage) { <li>✗ {{ disadvantage }}</li> }</ul></div></div></div>
+      </section>
+      @if (type.questions.length > 0) {
+        <section class="type-faq" aria-labelledby="faq-title"><span class="eyebrow">RESOLVEMOS TUS DUDAS</span><h2 id="faq-title">Preguntas frecuentes</h2><div class="faq">@for (question of type.questions; track question.question; let first = $first) { <details class="faq__item" [attr.open]="first ? '' : null"><summary>{{ question.question }}</summary><div class="faq__answer">{{ question.answer }}</div></details> }</div></section>
+      }
+      @if (type.related.length > 0) {
+        <section class="related" aria-labelledby="related-title"><span class="eyebrow">EXPLORA OTRAS OPCIONES</span><h2 id="related-title">También te puede interesar:</h2><div class="related__grid">@for (item of type.related; track item.slug) { <a class="related__link" [routerLink]="['/loan-types', item.slug]">{{ item.title }} <span aria-hidden="true">→</span></a> }</div><a class="related__all" routerLink="/loan-types">Todos los tipos de préstamo →</a></section>
+      }
+    }
+  }
+</main>
