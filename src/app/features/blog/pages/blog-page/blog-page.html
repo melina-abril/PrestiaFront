@@ -1,0 +1,61 @@
+<main class="blog-page">
+  <nav class="blog-page__breadcrumbs" aria-label="Migas de pan"><a routerLink="/lenders">Inicio</a> › Blog</nav>
+  <header class="blog-page__hero">
+    <span class="eyebrow">EL BLOG DE CREDARA</span>
+    <h1>Entiende mejor tu dinero.<br><span class="text-gradient">Decide con confianza.</span></h1>
+    <p class="lead">Guías y consejos para pedir dinero con cabeza.</p>
+    <p>Guías claras sobre préstamos, seguridad y finanzas personales para que elijas con toda la información.</p>
+  </header>
+
+  <section class="blog-page__filters" aria-label="Filtrar artículos por categoría">
+    <button type="button" [attr.aria-pressed]="!filters().category" [class.blog-page__filter--active]="!filters().category" (click)="chooseCategory(null)">Todas</button>
+    @for (category of categories; track category) {
+      <button type="button" [attr.aria-pressed]="filters().category === category" [class.blog-page__filter--active]="filters().category === category" (click)="chooseCategory(category)">{{ category }}</button>
+    }
+  </section>
+
+  @let state = articlesState();
+  @switch (state.status) {
+    @case ('loading') { <app-loading-state message="Cargando artículos…" /> }
+    @case ('error') { <app-error-alert message="No pudimos cargar los artículos." retryLabel="Reintentar" (retry)="reload()" /> }
+    @case ('empty') { <app-empty-state message="Todavía no hay artículos en esta categoría." /> }
+    @case ('ready') {
+      @if (state.data.items.length === 0) {
+        <app-empty-state message="Todavía no hay artículos en esta categoría." />
+      } @else {
+        <section class="blog-page__articles" aria-labelledby="articulos-title">
+          <div class="blog-page__section-heading">
+            <h2 id="articulos-title">Últimos artículos</h2>
+            <span>Mostrando {{ (state.data.page - 1) * state.data.size + 1 }}–{{ (state.data.page - 1) * state.data.size + state.data.items.length }} de {{ state.data.totalItems }} artículos</span>
+          </div>
+          <div class="blog-page__grid">
+            @for (article of state.data.items; track article.slug) {
+              <a class="blog-page__article" [routerLink]="['/blog', article.slug]">
+                <div class="blog-page__image">
+                  @if (article.imageUrl) { <img [src]="article.imageUrl" [alt]="article.title" loading="lazy" /> }
+                  @else { <span aria-hidden="true">✦</span> }
+                </div>
+                <div class="blog-page__article-content">
+                  <span class="badge">{{ article.category }}</span>
+                  <h3>{{ article.title }}</h3>
+                  <span class="blog-page__meta">{{ article.publishedAt | date: 'dd/MM/yyyy' }} · {{ article.readingMinutes }} min de lectura</span>
+                  <p>{{ article.summary }}</p>
+                  <span class="blog-page__read">Leer artículo →</span>
+                </div>
+              </a>
+            }
+          </div>
+        </section>
+        @if (state.data.totalPages > 1) {
+          <nav class="blog-page__pagination" aria-label="Paginación de artículos">
+            @if (state.data.page > 1) { <button type="button" (click)="goToPage(state.data.page - 1)" aria-label="Página anterior">←</button> }
+            @for (number of pageNumbers(state.data.totalPages); track number) {
+              <button type="button" [attr.aria-current]="state.data.page === number ? 'page' : null" [attr.aria-label]="'Página ' + number" (click)="goToPage(number)">{{ number }}</button>
+            }
+            @if (state.data.page < state.data.totalPages) { <button type="button" (click)="goToPage(state.data.page + 1)">Siguiente →</button> }
+          </nav>
+        }
+      }
+    }
+  }
+</main>
