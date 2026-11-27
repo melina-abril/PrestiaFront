@@ -1,0 +1,102 @@
+<main class="apr-page">
+  <nav class="breadcrumbs" aria-label="Migas de pan">
+    <a routerLink="/lenders">Inicio</a><span aria-hidden="true">›</span><span>Herramientas</span><span aria-hidden="true">›</span><span aria-current="page">Calculadora TAE</span>
+  </nav>
+
+  <div class="intro">
+    <span class="eyebrow">HERRAMIENTAS · CALCULADORA TAE</span>
+    <h1>Entiende el <span class="text-gradient">coste real</span> de tu préstamo</h1>
+    <p class="lead">Introduce el importe, los intereses y comisiones y el plazo de una oferta. Consulta cuánto devolverías y su tasa anual equivalente.</p>
+  </div>
+
+  <div class="calculator-grid">
+    <section class="calculator offer-form" aria-labelledby="offer-heading">
+      <div>
+        <h2 id="offer-heading">Datos de la oferta</h2>
+        <p>Indica los importes en euros y el plazo en días.</p>
+      </div>
+      <div class="input-grid">
+        <div class="field">
+          <label class="field__label" for="apr-amount">Importe del préstamo (€)</label>
+          <div class="input-wrap">
+            <input class="input" id="apr-amount" type="number" min="1" max="100000" step="0.01" inputmode="decimal" [value]="amount()" (input)="updateAmount($any($event.target).value)" [attr.aria-invalid]="amountError() ? 'true' : null" [attr.aria-describedby]="amountError() ? 'apr-amount-error' : null" />
+            <span aria-hidden="true">€</span>
+          </div>
+          @if (amountError(); as message) { <span id="apr-amount-error" class="field__error">{{ message }}</span> }
+        </div>
+        <div class="field">
+          <label class="field__label" for="apr-days">Plazo (días)</label>
+          <div class="input-wrap input-wrap--days">
+            <input class="input" id="apr-days" type="number" min="1" max="365" step="1" inputmode="numeric" [value]="days()" (input)="updateDays($any($event.target).value)" [attr.aria-invalid]="daysError() ? 'true' : null" [attr.aria-describedby]="daysError() ? 'apr-days-error' : null" />
+            <span aria-hidden="true">días</span>
+          </div>
+          @if (daysError(); as message) { <span id="apr-days-error" class="field__error">{{ message }}</span> }
+        </div>
+        <div class="field field--wide">
+          <label class="field__label" for="apr-cost">Intereses y comisiones (€)</label>
+          <div class="input-wrap">
+            <input class="input" id="apr-cost" type="number" min="0" max="100000" step="0.01" inputmode="decimal" [value]="cost()" (input)="updateCost($any($event.target).value)" [attr.aria-invalid]="costError() ? 'true' : null" [attr.aria-describedby]="costError() ? 'apr-cost-error apr-cost-hint' : 'apr-cost-hint'" />
+            <span aria-hidden="true">€</span>
+          </div>
+          <span id="apr-cost-hint" class="field__hint">Introduce el total que pagarías por encima del importe pedido.</span>
+          @if (costError(); as message) { <span id="apr-cost-error" class="field__error">{{ message }}</span> }
+        </div>
+      </div>
+      <button class="btn btn--solid" type="button" (click)="scrollToResult()">Calcular TAE <span aria-hidden="true">→</span></button>
+      <p class="field__hint">El resultado se actualiza automáticamente al escribir.</p>
+    </section>
+
+    <section id="apr-result" class="calculator offer-result" aria-labelledby="result-heading" aria-live="polite">
+      <div class="result-heading">
+        <h2 id="result-heading">TAE de la oferta</h2>
+        @if (result()) { <span class="badge badge--success">Calculado</span> }
+      </div>
+      @let offer = result();
+      <div class="calculator__result result-highlight">
+        <span>TAE estimada</span>
+        <strong class="calculator__amount">
+          @if (offer) { {{ NumberIsFiniteApr(offer.apr) ? (offer.apr | number:'1.0-0') : '∞' }} % } @else { — }
+        </strong>
+        @if (offer) { <span>Para un préstamo de {{ offer.amount | number:'1.0-2' }} € a {{ offer.days }} días</span> }
+      </div>
+      <dl class="result-breakdown">
+        <div><dt>Importe recibido</dt><dd>@if (offer) { {{ offer.amount | number:'1.2-2' }} € } @else { — }</dd></div>
+        <div><dt>Intereses y comisiones</dt><dd>@if (offer) { {{ offer.cost | number:'1.2-2' }} € } @else { — }</dd></div>
+        <div class="result-total"><dt>Total a devolver:</dt><dd>@if (offer) { {{ offer.total | number:'1.2-2' }} € } @else { — }</dd></div>
+      </dl>
+    </section>
+  </div>
+
+  <aside class="formula" aria-labelledby="formula-heading">
+    <h2 id="formula-heading">Cómo calculamos la TAE</h2>
+    <div class="formula__expression">TAE = ((1 + coste / importe) ^ (365 / días) − 1) × 100</div>
+    <p>La TAE anualiza el coste de un único plazo; no significa que pagarías ese porcentaje por un préstamo de esa duración.</p>
+  </aside>
+
+  <section class="costs" aria-labelledby="costs-heading">
+    <div>
+      <span class="eyebrow">COMPARATIVA POR PLAZO</span>
+      <h2 id="costs-heading">Tabla de costes por cada 100 €</h2>
+      <p>Con la tarifa de referencia del sitio: 1 % diario y 30 primeros días gratis para clientes nuevos.</p>
+    </div>
+    <div class="costs__scroll" tabindex="0" role="region" aria-label="Tabla de costes; desplázate horizontalmente para ver todas las columnas">
+      <table class="costs__table">
+        <thead>
+          <tr><th scope="col">Plazo</th><th scope="col">Coste cliente nuevo</th><th scope="col">TAE cliente nuevo</th><th scope="col">Coste recurrente</th><th scope="col">TAE recurrente</th></tr>
+        </thead>
+        <tbody>
+          @for (row of rows; track row.days) {
+            <tr>
+              <th scope="row">{{ row.days }} días</th>
+              <td>{{ row.newCost | number:'1.0-0' }} €</td>
+              <td [class.costs__free]="row.newApr === 0">{{ row.newApr | number:'1.0-0' }} %</td>
+              <td>{{ row.returningCost | number:'1.0-0' }} €</td>
+              <td>{{ row.returningApr | number:'1.0-0' }} %</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <p class="costs__note">Los importes son ejemplos, no ofertas vigentes de entidades. Comprueba siempre las condiciones y la TAE comunicadas por la entidad antes de contratar.</p>
+  </section>
+</main>

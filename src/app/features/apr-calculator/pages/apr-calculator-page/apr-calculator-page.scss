@@ -1,0 +1,225 @@
+.apr-page {
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-7) var(--gutter) var(--space-8);
+  background: var(--gradient-hero);
+}
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+  margin-bottom: var(--space-6);
+  color: var(--text-secondary);
+  font-size: var(--fs-small);
+}
+.intro {
+  display: grid;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+.intro .eyebrow,
+.intro h1,
+.intro p {
+  margin: 0;
+}
+.intro h1 {
+  max-width: 780px;
+}
+.intro .lead {
+  max-width: 740px;
+}
+.calculator-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr);
+  gap: var(--space-5);
+  align-items: stretch;
+}
+.offer-form,
+.offer-result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+}
+.offer-form h2,
+.offer-result h2 {
+  margin: 0 0 var(--space-2);
+  color: var(--primary);
+  font-size: var(--fs-h3);
+}
+.offer-form p {
+  margin: 0;
+  font-size: var(--fs-small);
+}
+.input-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+.field--wide {
+  grid-column: 1 / -1;
+}
+.input-wrap {
+  position: relative;
+}
+.input-wrap .input {
+  padding-right: var(--space-7);
+}
+.input-wrap--days .input {
+  padding-right: var(--space-8);
+}
+.input-wrap > span {
+  position: absolute;
+  top: 50%;
+  right: var(--space-4);
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+.field__error {
+  color: var(--error);
+  font-size: var(--fs-small);
+}
+.offer-form .btn {
+  align-self: flex-start;
+}
+.result-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.result-heading h2 {
+  margin: 0;
+}
+.result-highlight {
+  display: grid;
+  gap: var(--space-1);
+  text-align: left;
+}
+.result-highlight > span {
+  color: var(--text-secondary);
+  font-size: var(--fs-small);
+}
+.result-breakdown {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+}
+.result-breakdown > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.result-breakdown dt {
+  color: var(--text-secondary);
+}
+.result-breakdown dd {
+  margin: 0;
+  font-weight: 700;
+  text-align: right;
+}
+.result-total {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+.result-total dt,
+.result-total dd {
+  color: var(--primary);
+  font-weight: 700;
+}
+.formula {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--soft-background);
+}
+.formula h2 {
+  margin: 0;
+  color: var(--primary);
+  font-size: var(--fs-h4);
+}
+.formula__expression {
+  overflow-x: auto;
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.formula p {
+  margin: 0;
+  font-size: var(--fs-small);
+}
+.costs {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+  margin-top: var(--space-7);
+}
+.costs .eyebrow {
+  margin-bottom: var(--space-2);
+}
+.costs h2 {
+  margin-bottom: var(--space-2);
+  color: var(--primary);
+}
+.costs p {
+  margin: 0;
+}
+.costs__scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.costs__table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  font-size: var(--fs-small);
+  font-variant-numeric: tabular-nums;
+}
+.costs__table thead {
+  background: var(--soft-background);
+}
+.costs__table th,
+.costs__table td {
+  padding: var(--space-3) var(--space-4);
+  text-align: right;
+  white-space: nowrap;
+}
+.costs__table th:first-child {
+  text-align: left;
+}
+.costs__table tbody tr {
+  border-top: 1px solid var(--border);
+}
+.costs__free {
+  color: var(--success);
+  font-weight: 700;
+}
+.costs__note {
+  font-size: var(--fs-small);
+}
+@media (max-width: 760px) {
+  .calculator-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .input-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .field--wide {
+    grid-column: auto;
+  }
+}

@@ -1,0 +1,96 @@
+<main class="loan-test">
+  <div class="loan-test__inner">
+    <nav class="loan-test__breadcrumbs" aria-label="Migas de pan">
+      <a routerLink="/lenders">Inicio</a><span aria-hidden="true">›</span>
+      <span>Herramientas</span><span aria-hidden="true">›</span>
+      <span aria-current="page">Test de préstamos</span>
+    </nav>
+
+    <header class="loan-test__intro">
+      <span class="eyebrow">HERRAMIENTAS · TEST DE PRÉSTAMOS</span>
+      <h1>Encuentra el préstamo que <span class="text-gradient">encaja contigo</span></h1>
+      <p class="lead">Responde 4 preguntas y descubre qué tipo de préstamo puede ajustarse mejor a lo que necesitas. Sin registro ni compromiso.</p>
+    </header>
+
+    <div class="loan-test__grid">
+      <section class="calculator loan-test__panel" [attr.aria-labelledby]="finished() ? 'test-result-title' : 'current-question-title'">
+        @if (finished(); as isFinished) {
+          @if (isFinished && recommendation(); as result) {
+            <span class="badge">TU RESULTADO</span>
+            <div class="icon-chip icon-chip--gradient" aria-hidden="true">✓</div>
+            <h2 id="test-result-title">Te recomendamos: <span class="text-gradient">{{ result.title }}</span></h2>
+            <p>{{ result.reason }}</p>
+            @if (answers().asnef === 'unknown') {
+              <p class="loan-test__notice">Si no sabes si estás en ASNEF, puedes consultarlo gratis en el propio fichero antes de pedir.</p>
+            }
+            <h3>Tus respuestas</h3>
+            <dl class="loan-test__answer-list">
+              @for (question of questions; track question.key) {
+                <div><dt>{{ question.summaryLabel }}</dt><dd>{{ answerLabel(question) }}</dd></div>
+              }
+            </dl>
+            <p class="loan-test__disclaimer">Esta orientación sigue reglas generales; no es una oferta ni garantiza su aprobación. Credara compara opciones y no concede préstamos.</p>
+            <div class="loan-test__actions">
+              <button class="btn btn--secondary" type="button" (click)="restart()">Repetir el test</button>
+              <a class="btn btn--solid" [routerLink]="['/loan-types', result.slug]">Ver {{ result.title.toLowerCase() }} <span aria-hidden="true">→</span></a>
+            </div>
+          }
+        } @else {
+          <div class="loan-test__panel-top">
+            <span class="badge">PREGUNTA {{ step() + 1 }} DE 4</span>
+            @if (step() === 3) { <span class="loan-test__almost">Casi has terminado</span> }
+          </div>
+          <div class="loan-test__progress" role="progressbar" [attr.aria-valuenow]="step() + 1" aria-valuemin="1" aria-valuemax="4" [attr.aria-label]="'Pregunta ' + (step() + 1) + ' de 4'">
+            @for (question of questions; track question.key; let index = $index) {
+              <div class="loan-test__progress-step" [class.loan-test__progress-step--done]="index < step()" [class.loan-test__progress-step--active]="index === step()">
+                <span class="loan-test__progress-bar"></span><span>{{ question.shortLabel }}</span>
+              </div>
+            }
+          </div>
+          <div class="loan-test__divider"></div>
+          <div class="loan-test__question-heading">
+            <span class="icon-chip icon-chip--pink" aria-hidden="true">?</span>
+            <h2 id="current-question-title">{{ currentQuestion().title }}</h2>
+            <p>{{ currentQuestion().hint }}</p>
+          </div>
+          <div class="loan-test__options" role="group" [attr.aria-label]="currentQuestion().title">
+            @for (option of currentQuestion().options; track option.value) {
+              <button type="button" class="loan-test__option" [class.loan-test__option--selected]="answers()[currentQuestion().key] === option.value" [attr.aria-pressed]="answers()[currentQuestion().key] === option.value" (click)="select(option.value)">
+                <span class="loan-test__option-indicator" aria-hidden="true"></span>{{ option.label }}
+              </button>
+            }
+          </div>
+          <div class="loan-test__actions">
+            @if (step() > 0) {
+              <button class="btn btn--secondary" type="button" (click)="previous()">← Anterior</button>
+            } @else { <span></span> }
+            <button class="btn btn--solid" type="button" [disabled]="answers()[currentQuestion().key] === null" (click)="next()">{{ step() === 3 ? 'Ver resultado' : 'Siguiente' }} <span aria-hidden="true">→</span></button>
+          </div>
+        }
+      </section>
+
+      <aside class="loan-test__aside" aria-label="Información del test">
+        <section class="card loan-test__summary">
+          <div class="loan-test__summary-heading"><h2>Tus respuestas</h2><span class="badge badge--success">{{ answeredCount() }} de 4</span></div>
+          <dl class="loan-test__answer-list">
+            @for (question of questions; track question.key) {
+              <div><dt>{{ question.summaryLabel }}</dt><dd>{{ answerLabel(question) }}</dd></div>
+            }
+          </dl>
+        </section>
+        <section class="card loan-test__guidance">
+          <span class="icon-chip icon-chip--gradient" aria-hidden="true">✓</span>
+          <span class="eyebrow">RECOMENDACIÓN ORIENTATIVA</span>
+          @if (finished() && recommendation(); as result) {
+            <h2>{{ result.title }}</h2><p>{{ result.reason }}</p>
+          } @else {
+            <h2>Una opción para ti</h2><p>Responde las cuatro preguntas y descubre qué tipo de préstamo se ajusta a tus necesidades.</p>
+          }
+          <p class="loan-test__disclaimer">Esta orientación no garantiza la aprobación de un préstamo.</p>
+        </section>
+      </aside>
+    </div>
+
+    <p class="loan-test__privacy"><span aria-hidden="true">♢</span> El test se realiza en tu navegador. No guardamos tus respuestas.</p>
+  </div>
+</main>
