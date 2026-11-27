@@ -1,0 +1,266 @@
+.apr-page {
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-7) var(--gutter) var(--space-8);
+  background: var(--gradient-hero);
+}
+
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+  color: var(--text-secondary);
+  font-size: var(--fs-small);
+}
+
+.intro {
+  display: grid;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.intro .eyebrow,
+.intro h1,
+.intro p {
+  margin: 0;
+}
+
+.intro h1 {
+  max-width: 780px;
+}
+
+.intro .lead {
+  max-width: 740px;
+}
+
+.calculator-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr);
+  align-items: stretch;
+  gap: var(--space-5);
+}
+
+.offer-form,
+.offer-result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+.offer-form h2,
+.offer-result h2 {
+  margin: 0 0 var(--space-2);
+  color: var(--primary);
+  font-size: var(--fs-h3);
+}
+
+.offer-form p {
+  margin: 0;
+  font-size: var(--fs-small);
+}
+
+.input-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.field--wide {
+  grid-column: 1 / -1;
+}
+
+.input-wrap {
+  position: relative;
+}
+
+.input-wrap .input {
+  padding-right: var(--space-7);
+}
+
+.input-wrap .input--days {
+  padding-right: var(--space-8);
+}
+
+.input-unit {
+  position: absolute;
+  top: 50%;
+  right: var(--space-4);
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.field__error {
+  color: var(--error);
+  font-size: var(--fs-small);
+}
+
+.offer-form .btn {
+  align-self: flex-start;
+}
+
+.result-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.result-highlight {
+  display: grid;
+  gap: var(--space-1);
+  text-align: left;
+}
+
+.result-highlight span {
+  color: var(--text-secondary);
+  font-size: var(--fs-small);
+}
+
+.result-details {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.result-details div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.result-details dt {
+  color: var(--text-secondary);
+}
+
+.result-details dd {
+  margin: 0;
+  font-weight: 700;
+  text-align: right;
+}
+
+.result-details .result-total {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+.result-total dt,
+.result-total dd {
+  color: var(--primary);
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.result-total dd {
+  font-size: var(--fs-h3);
+}
+
+.formula {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--soft-background);
+}
+
+.formula strong {
+  color: var(--primary);
+  font-family: var(--font-display);
+}
+
+.formula-expression {
+  overflow-x: auto;
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.formula p,
+.reference p {
+  margin: 0;
+  font-size: var(--fs-small);
+}
+
+.reference {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-7);
+}
+
+.reference .eyebrow {
+  margin-bottom: var(--space-2);
+}
+
+.reference h2 {
+  margin: 0 0 var(--space-2);
+  color: var(--primary);
+}
+
+.table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.cost-table {
+  width: 100%;
+  min-width: 650px;
+  border-collapse: collapse;
+  font-size: var(--fs-small);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.cost-table thead {
+  background: var(--soft-background);
+}
+
+.cost-table thead th:not(:first-child) {
+  color: var(--primary);
+}
+
+.cost-table th,
+.cost-table td {
+  padding: var(--space-3) var(--space-4);
+  white-space: nowrap;
+}
+
+.cost-table th:first-child {
+  text-align: left;
+}
+
+.cost-table tbody tr {
+  border-top: 1px solid var(--border);
+}
+
+.zero-apr {
+  color: var(--success);
+  font-weight: 700;
+}
+
+@media (max-width: 760px) {
+  .calculator-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .input-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .field--wide {
+    grid-column: auto;
+  }
+}
