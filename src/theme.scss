@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
 
-/* El bloque brand-style:start … brand-style:end se incorpora desde el estilo de marca. */
+/* El bloque brand-style:start … brand-style:end se incorpora aquí desde DATA.brandStyle. */
 :root {
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-600);
@@ -8,10 +8,13 @@
   --color-background: var(--background);
   --color-bg: var(--background);
   --color-surface: var(--surface);
-  --color-surface-muted: var(--soft-background);
+  --color-soft-background: var(--soft-background);
+  --color-active-item: var(--active-item);
   --color-border: var(--border);
   --color-text: var(--text-primary);
-  --color-text-muted: var(--text-secondary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-muted: var(--text-secondary);
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-error: var(--error);
@@ -22,6 +25,7 @@
   --space-lg: var(--space-5);
   --space-xl: var(--space-6);
   --radius: var(--radius-md);
+  --font-sans: var(--font-body);
 }
 
 /* brand-style:start — CSS de la guía de estilos, copiado tal cual al generar (no editar a mano) */
@@ -567,6 +571,8 @@ img { max-width: 100%; display: block; }
 /* theme-tokens:start — variables del kit que el tema no definía (completadas al generar) */
 :root {
   --color-on-primary: #ffffff;
+  --color-surface-muted: var(--soft-background);
+  --color-text-muted: var(--text-secondary);
   --color-focus: var(--accent);
   --color-info: var(--primary);
   --color-info-surface: #efecfe;
