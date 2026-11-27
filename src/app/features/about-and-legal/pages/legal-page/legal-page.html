@@ -1,0 +1,88 @@
+<main class="legal-page">
+  @if (document(); as legalDocument) {
+    <nav class="legal-page__breadcrumbs" aria-label="Migas de pan">
+      <a routerLink="/lenders">Inicio</a><span aria-hidden="true">/</span><a routerLink="/sobre-nosotros">Legal</a><span aria-hidden="true">/</span><span aria-current="page">{{ legalDocument.title }}</span>
+    </nav>
+
+    <div class="legal-page__grid">
+      <aside class="legal-page__sidebar" aria-label="Menú de textos legales">
+        <strong class="legal-page__sidebar-title">DOCUMENTOS</strong>
+        <nav class="legal-page__desktop-menu" aria-label="Documentos legales">
+          @for (item of documents; track item.slug) {
+            <a [routerLink]="['/legal', item.slug]" [attr.aria-current]="item.slug === legalDocument.slug ? 'page' : null">{{ item.title }}</a>
+          }
+        </nav>
+        <details class="legal-page__mobile-menu">
+          <summary>{{ legalDocument.title }} <span aria-hidden="true">⌄</span></summary>
+          <nav aria-label="Elegir documento legal">
+            @for (item of documents; track item.slug) {
+              <a [routerLink]="['/legal', item.slug]" [attr.aria-current]="item.slug === legalDocument.slug ? 'page' : null">{{ item.title }}</a>
+            }
+          </nav>
+        </details>
+        <div class="legal-page__cookie-shortcut">
+          <strong>¿Quieres revisar tus preferencias?</strong>
+          <button type="button" (click)="openCookieSettings()">Configurar cookies →</button>
+        </div>
+      </aside>
+
+      <article class="card legal-page__document" aria-labelledby="legal-document-title">
+        <div class="legal-page__heading">
+          <div>
+            <span class="badge">DOCUMENTO LEGAL</span>
+            <h1 id="legal-document-title">{{ legalDocument.title }}</h1>
+            <p class="legal-page__date">Última actualización: {{ legalDocument.updatedAt }}</p>
+          </div>
+          <button class="btn btn--secondary btn--sm legal-page__print" type="button" (click)="printDocument()" [attr.aria-label]="'Imprimir ' + legalDocument.title.toLowerCase()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 9V3h10v6M7 18H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 15h10v6H7v-6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            Imprimir
+          </button>
+        </div>
+        <p class="legal-page__draft">Contenido informativo pendiente de revisión y aprobación por el área legal de Credara.</p>
+        <div class="legal-page__sections">
+          @for (section of legalDocument.sections; track section.title; let number = $index) {
+            <section>
+              <h2>{{ number + 1 }}. {{ section.title }}</h2>
+              @for (paragraph of section.paragraphs; track paragraph) {
+                <p>{{ paragraph }}</p>
+              }
+            </section>
+          }
+        </div>
+        @if (legalDocument.slug === 'politica-privacidad') {
+          <div class="legal-page__note">
+            <span aria-hidden="true">ⓘ</span>
+            <p>Para ejercer tus derechos, visita nuestra página de <a routerLink="/contacto">contacto</a>. Puedes revisar tus preferencias desde <button type="button" (click)="openCookieSettings()">Configurar cookies</button>.</p>
+          </div>
+        }
+        @if (legalDocument.slug === 'politica-cookies') {
+          <div class="legal-page__note">
+            <span aria-hidden="true">ⓘ</span>
+            <p>Puedes cambiar tus preferencias de cookies en cualquier momento. <button type="button" (click)="openCookieSettings()">Configurar cookies</button></p>
+          </div>
+        }
+      </article>
+    </div>
+  } @else {
+    <section class="legal-page__not-found" aria-labelledby="legal-not-found-title">
+      <h1 id="legal-not-found-title">Documento no encontrado</h1>
+      <p>El texto legal que buscas no está disponible.</p>
+      <a class="btn btn--secondary" routerLink="/sobre-nosotros">Volver a Sobre nosotros</a>
+    </section>
+  }
+
+  @if (cookieSettingsOpen()) {
+    <div class="legal-page__overlay">
+      <section class="legal-page__dialog" role="dialog" aria-modal="true" aria-labelledby="cookie-settings-title" aria-describedby="cookie-settings-description">
+        <h2 id="cookie-settings-title">Configurar cookies</h2>
+        <p id="cookie-settings-description">Elige si permites las cookies de análisis. Las necesarias siempre están activas.</p>
+        <div class="legal-page__preference"><span>Cookies necesarias</span><span>Siempre activas</span></div>
+        <label class="legal-page__preference" for="legal-analytics-cookies"><span>Cookies de análisis</span><input id="legal-analytics-cookies" type="checkbox" [checked]="analyticsAllowed()" (change)="analyticsAllowed.set($any($event.target).checked)" /></label>
+        <div class="legal-page__dialog-actions">
+          <button class="btn btn--secondary" type="button" (click)="cookieSettingsOpen.set(false)">Cancelar</button>
+          <button class="btn btn--primary" type="button" (click)="saveCookieSettings()">Guardar preferencias</button>
+        </div>
+      </section>
+    </div>
+  }
+</main>
