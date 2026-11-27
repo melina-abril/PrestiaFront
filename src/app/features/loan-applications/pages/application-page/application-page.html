@@ -1,0 +1,93 @@
+<main class="application-page">
+  <div class="application-page__inner">
+    <nav class="breadcrumbs" aria-label="Migas de pan"><a routerLink="/lenders">Inicio</a><span aria-hidden="true">›</span><span>Solicitud de ofertas</span></nav>
+    <span class="eyebrow"><span class="eyebrow__dot"></span> SOLICITUD DE OFERTAS</span>
+    <h1>Descubre tus <span class="text-gradient">ofertas de préstamo</span></h1>
+    <p class="intro">Completa tus datos para encontrar entidades que se ajusten a tu solicitud. Sin compromiso y sin coste para ti.</p>
+
+    <div class="request-steps" aria-label="Progreso de la solicitud">
+      <div class="request-step" [class.request-step--active]="phase() === 'form'"><span class="request-step__number">1</span> Tus datos</div>
+      <span class="request-steps__line"></span>
+      <div class="request-step" [class.request-step--active]="phase() === 'analysis'"><span class="request-step__number">2</span> Análisis</div>
+      <span class="request-steps__line"></span>
+      <div class="request-step" [class.request-step--active]="phase() === 'offers'"><span class="request-step__number">3</span> Ofertas</div>
+    </div>
+
+    <div class="request-layout">
+      <div class="request-layout__main">
+        @if (phase() === 'form') {
+          <section class="request-card" aria-labelledby="datos-title">
+            <div class="request-card__heading"><span class="icon-chip" aria-hidden="true">♙</span><div><h2 id="datos-title">Cuéntanos un poco sobre ti</h2><p>Los campos marcados con * son obligatorios.</p></div></div>
+            <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+              <div class="request-fields">
+                <div class="field"><label class="field__label" for="application-name">Nombre y apellidos *</label>
+                  <input class="input" id="application-name" type="text" autocomplete="name" placeholder="Ej. Lucía García López" formControlName="name" [class.is-invalid]="!!errorFor('name')" [attr.aria-invalid]="!!errorFor('name')" [attr.aria-describedby]="errorFor('name') ? 'application-name-error' : null" />
+                  @if (errorFor('name'); as message) { <span class="field__error" id="application-name-error">{{ message }}</span> }
+                </div>
+                <div class="field"><label class="field__label" for="application-birthDate">Fecha de nacimiento *</label>
+                  <input class="input" id="application-birthDate" type="date" autocomplete="bday" formControlName="birthDate" [class.is-invalid]="!!errorFor('birthDate')" [attr.aria-invalid]="!!errorFor('birthDate')" [attr.aria-describedby]="errorFor('birthDate') ? 'application-birthDate-error' : null" />
+                  @if (errorFor('birthDate'); as message) { <span class="field__error" id="application-birthDate-error">{{ message }}</span> }
+                </div>
+                <div class="field"><label class="field__label" for="application-mobile">Teléfono móvil *</label>
+                  <span class="phone-field" [class.is-invalid]="!!errorFor('mobile')"><span aria-hidden="true">+34</span><input id="application-mobile" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="9" placeholder="612345678" formControlName="mobile" [attr.aria-invalid]="!!errorFor('mobile')" [attr.aria-describedby]="errorFor('mobile') ? 'application-mobile-error' : null" /></span>
+                  @if (errorFor('mobile'); as message) { <span class="field__error" id="application-mobile-error">{{ message }}</span> }
+                </div>
+                <div class="field"><label class="field__label" for="application-email">Correo electrónico *</label>
+                  <input class="input" id="application-email" type="email" autocomplete="email" placeholder="lucia@ejemplo.es" formControlName="email" [class.is-invalid]="!!errorFor('email')" [attr.aria-invalid]="!!errorFor('email')" [attr.aria-describedby]="errorFor('email') ? 'application-email-error' : null" />
+                  @if (errorFor('email'); as message) { <span class="field__error" id="application-email-error">{{ message }}</span> }
+                </div>
+                <div class="field"><label class="field__label" for="application-employmentStatus">Situación laboral *</label>
+                  <select class="select" id="application-employmentStatus" formControlName="employmentStatus" [attr.aria-invalid]="!!errorFor('employmentStatus')" [attr.aria-describedby]="errorFor('employmentStatus') ? 'application-employmentStatus-error' : null"><option value="">Selecciona tu situación</option>@for (option of employmentOptions; track option.value) { <option [value]="option.value">{{ option.label }}</option> }</select>
+                  @if (errorFor('employmentStatus'); as message) { <span class="field__error" id="application-employmentStatus-error">{{ message }}</span> }
+                </div>
+                <fieldset class="field asnef-field"><legend class="field__label">¿Figuras en ASNEF? *</legend><div class="asnef-options">@for (option of asnefOptions; track option.value) { <label class="asnef-option"><input type="radio" formControlName="asnefStatus" [value]="option.value" [attr.aria-invalid]="!!errorFor('asnefStatus')" [attr.aria-describedby]="errorFor('asnefStatus') ? 'application-asnefStatus-error' : null" />{{ option.label }}</label> }</div>
+                  @if (errorFor('asnefStatus'); as message) { <span class="field__error" id="application-asnefStatus-error">{{ message }}</span> }
+                </fieldset>
+              </div>
+              <div class="consent"><strong>Tus datos, bajo tu control</strong>
+                <label class="consent__option"><input id="application-privacyAccepted" type="checkbox" formControlName="privacyAccepted" [attr.aria-invalid]="!!errorFor('privacyAccepted')" [attr.aria-describedby]="errorFor('privacyAccepted') ? 'application-privacyAccepted-error' : null" /><span>He leído y acepto la Política de privacidad y los Términos y condiciones. *</span></label>
+                @if (errorFor('privacyAccepted'); as message) { <span class="field__error" id="application-privacyAccepted-error">{{ message }}</span> }
+                <label class="consent__option"><input type="checkbox" formControlName="marketingAccepted" /><span>Quiero recibir ofertas y novedades por correo. Opcional.</span></label>
+              </div>
+              @if (submitError(); as message) { <app-error-alert [message]="message" /> }
+              <button class="btn btn--solid submit-button" type="submit" [disabled]="saving()">{{ saving() ? 'Buscando…' : 'Ver mis ofertas →' }}</button>
+              <p class="form-note">🔒 Conexión protegida con SSL 256-bit. * Campos obligatorios.</p>
+              <p class="form-note">La solicitud no garantiza su aprobación.</p>
+            </form>
+          </section>
+        } @else if (phase() === 'analysis') {
+          <section class="request-card analysis" aria-live="polite"><span class="icon-chip" aria-hidden="true">✦</span><h2>Estamos buscando tus ofertas…</h2><p>Comparamos las entidades que se ajustan a tu perfil.</p>
+            <div class="analysis__track" role="progressbar" [attr.aria-valuenow]="progressStep()" aria-valuemin="0" aria-valuemax="3" aria-label="Análisis de la solicitud"><span [style.width.%]="progressStep() * 100 / 3"></span></div>
+            <ol class="analysis__steps"><li [class.is-complete]="progressStep() >= 1">{{ progressStep() >= 1 ? '✓' : '○' }} Analizando tu perfil</li><li [class.is-complete]="progressStep() >= 2">{{ progressStep() >= 2 ? '✓' : '○' }} Comparando entidades</li><li [class.is-complete]="progressStep() >= 3">{{ progressStep() >= 3 ? '✓' : '○' }} Preparando ofertas</li></ol>
+          </section>
+        } @else {
+          @let state = offerState();
+          @switch (state.status) {
+            @case ('loading') { <section class="request-card"><h2>Estamos buscando tus ofertas…</h2></section> }
+            @case ('error') { <section class="request-card"><app-error-alert [message]="state.message" retryLabel="Reintentar" (retry)="retryOffers()" /></section> }
+            @case ('empty') { <section class="request-card"><h2>No encontramos ofertas para tu solicitud</h2><p>Prueba con otro importe o plazo: muchas entidades tienen límites para clientes nuevos.</p><a class="btn btn--solid" routerLink="/lenders" fragment="calculadora">Modificar solicitud →</a></section> }
+            @case ('ready') {
+              <section class="offers" aria-live="polite"><h2>¡Tenemos {{ state.data.offers.length }} {{ state.data.offers.length === 1 ? 'oferta' : 'ofertas' }} para ti!</h2><p>Ordenadas de menor a mayor total a devolver. Puedes solicitar en varias entidades sin compromiso.</p>
+                @if (clickError(); as message) { <app-error-alert [message]="message" /> }
+                @for (offer of sortedOffers(state.data.offers); track offer.lenderId; let first = $first) {
+                  <article class="offer-card"><div class="offer-card__heading"><span class="offer-card__initials" aria-hidden="true">{{ offer.initials }}</span><div><h3>{{ offer.name }}</h3>@if (first) { <span class="badge badge--gradient">Mejor oferta</span> } @if (offer.firstLoanFree) { <span class="badge badge--success">1.er préstamo 0 %</span> } @if (visited().has(offer.lenderId)) { <span class="badge">Ya visitaste esta entidad</span> }</div></div>
+                    <div class="offer-card__details"><div><span>Importe</span><strong>{{ offer.amount | currency:'EUR':'symbol':'1.0-0' }}</strong></div><div><span>Total a devolver</span><strong class="offer-card__total">{{ offer.totalNew | currency:'EUR':'symbol':'1.0-0' }}</strong>@if (offer.totalReturning !== offer.totalNew) { <small>Si ya fuiste cliente: {{ offer.totalReturning | currency:'EUR':'symbol':'1.0-0' }}</small> }</div><div><span>Respuesta</span><strong>{{ responseTime(offer.responseMinutes) }}</strong></div></div>
+                    <button type="button" class="btn btn--solid" [disabled]="!!visiting()" (click)="visit(offer.lenderId)">{{ visiting() === offer.lenderId ? 'Abriendo…' : 'Ir a la entidad ↗' }}</button>
+                  </article>
+                }
+                <p class="offers__disclaimer">Las ofertas son orientativas: la entidad confirma las condiciones tras estudiar tu solicitud y puede rechazarla.</p>
+              </section>
+            }
+          }
+        }
+      </div>
+
+      <aside class="request-summary calculator" aria-label="Resumen de tu préstamo"><div class="request-summary__heading"><span class="icon-chip" aria-hidden="true">▣</span><div><h2>Tu préstamo</h2><span>Resumen de la simulación</span></div></div>
+        <div class="calculator__result"><span>Importe solicitado</span><div class="calculator__amount">{{ calculation().amount | currency:'EUR':'symbol':'1.0-0' }}</div></div>
+        <dl class="request-summary__values"><div><dt>Plazo de devolución</dt><dd>{{ calculation().termDays }} días</dd></div><div><dt>Intereses (cliente nuevo)</dt><dd>{{ calculation().newCustomer.interest | currency:'EUR':'symbol':'1.0-0' }}</dd></div><div><dt>Total a devolver</dt><dd>{{ calculation().newCustomer.total | currency:'EUR':'symbol':'1.0-0' }}</dd></div><div><dt>Devolución</dt><dd>{{ calculation().dueDate | date:'dd/MM/yyyy' }}</dd></div></dl>
+        <a class="btn btn--secondary request-summary__modify" routerLink="/lenders" fragment="calculadora">Modificar solicitud →</a>
+        <p>El servicio es gratuito. Cada entidad determinará las condiciones finales según tu perfil.</p>
+      </aside>
+    </div>
+  </div>
+</main>

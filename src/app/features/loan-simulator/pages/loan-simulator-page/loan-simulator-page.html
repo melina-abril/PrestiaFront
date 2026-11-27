@@ -1,0 +1,75 @@
+<main class="simulator-page">
+  <nav class="breadcrumbs" aria-label="Migas de pan">Inicio <span aria-hidden="true">›</span> Herramientas <span aria-hidden="true">›</span> Simulador de préstamos</nav>
+  <header class="intro">
+    <span class="eyebrow">HERRAMIENTAS · SIMULADOR</span>
+    <h1>Calcula el coste de tu <span class="text-gradient">préstamo</span></h1>
+    <p class="lead">Calcula intereses, TAE y total a devolver como cliente nuevo y como cliente recurrente.</p>
+    <div class="trust-tags"><span class="badge badge--success">✓ Gratis</span><span class="badge badge--success">✓ Resultado inmediato</span><span class="badge badge--success">✓ Sin registro</span></div>
+  </header>
+
+  @let cost = result();
+  <div class="simulator-grid">
+    <section class="explanation" aria-label="Ahorro y desglose del préstamo">
+      <h2>Entiende lo que pagarías</h2>
+      <p>Elige cuánto necesitas y cuándo lo devolverías. Consulta una estimación clara antes de comparar ofertas.</p>
+      @if (savings() > 0) {
+        <div class="savings" role="status">✓ Como cliente nuevo te ahorras <strong>{{ savings() | number:'1.0-0' }} €.</strong></div>
+      }
+      <div class="card breakdown">
+        <h3>Desglose del total</h3>
+        <div class="breakdown__item">
+          <div class="breakdown__heading"><strong>Cliente nuevo</strong><span>{{ cost.newCustomer.total | number:'1.0-0' }} €</span></div>
+          <div class="breakdown__bar" role="img" [attr.aria-label]="'Cliente nuevo: ' + newCapitalPercent() + '% capital y ' + (100 - newCapitalPercent()) + '% intereses'">
+            <span class="breakdown__capital" [style.width.%]="newCapitalPercent()"></span><span class="breakdown__interest" [style.width.%]="100 - newCapitalPercent()"></span>
+          </div>
+        </div>
+        <div class="breakdown__item">
+          <div class="breakdown__heading"><strong>Recurrente</strong><span>{{ cost.returningCustomer.total | number:'1.0-0' }} €</span></div>
+          <div class="breakdown__bar" role="img" [attr.aria-label]="'Recurrente: ' + returningCapitalPercent() + '% capital y ' + (100 - returningCapitalPercent()) + '% intereses'">
+            <span class="breakdown__capital" [style.width.%]="returningCapitalPercent()"></span><span class="breakdown__interest" [style.width.%]="100 - returningCapitalPercent()"></span>
+          </div>
+        </div>
+        <div class="breakdown__legend"><span><i class="legend-capital" aria-hidden="true"></i> Capital</span><span><i class="legend-interest" aria-hidden="true"></i> Intereses</span></div>
+      </div>
+    </section>
+
+    <section class="calculator controls" aria-labelledby="simulator-title">
+      <div class="section-heading"><h2 id="simulator-title">Simulador avanzado</h2><span class="badge">Estimación orientativa</span></div>
+      <div class="field">
+        <label class="field__label" for="sim-amount">Importe que necesitas</label>
+        <div class="number-field"><input class="input" id="sim-amount" type="number" min="50" max="2000" step="50" [value]="amount()" (change)="setAmount($any($event.target).value)" /><span aria-hidden="true">€</span></div>
+        <input class="range" type="range" aria-label="Ajustar importe" min="50" max="2000" step="50" [value]="amount()" [style.--fill]="amountFill()" (input)="setAmount($any($event.target).value)" />
+        <div class="range-labels"><span>50 €</span><span>2.000 €</span></div>
+      </div>
+      <div class="field">
+        <label class="field__label" for="sim-term">Plazo de devolución</label>
+        <div class="number-field"><input class="input" id="sim-term" type="number" min="7" max="90" step="1" [value]="termDays()" (change)="setTermDays($any($event.target).value)" /><span aria-hidden="true">días</span></div>
+        <input class="range" type="range" aria-label="Ajustar plazo" min="7" max="90" step="1" [value]="termDays()" [style.--fill]="termFill()" (input)="setTermDays($any($event.target).value)" />
+        <div class="range-labels"><span>7 días</span><span>90 días</span></div>
+      </div>
+      <div class="results">
+        <h3>Resultado estimado</h3>
+        <p class="due-date">Fecha de devolución: <strong>{{ cost.dueDate | date:'dd/MM/yyyy' }}</strong></p>
+        <div class="result-card"><span class="badge badge--success">Cliente nuevo</span><strong class="result-card__total">{{ cost.newCustomer.total | number:'1.0-0' }} €</strong><span>Intereses: {{ cost.newCustomer.interest | number:'1.0-0' }} € · TAE: {{ cost.newCustomer.tae | number:'1.0-0' }} %</span></div>
+        <div class="result-card result-card--secondary"><span class="badge">Cliente recurrente</span><strong class="result-card__total">{{ cost.returningCustomer.total | number:'1.0-0' }} €</strong><span>Intereses: {{ cost.returningCustomer.interest | number:'1.0-0' }} € · TAE: {{ cost.returningCustomer.tae | number:'1.0-0' }} %</span></div>
+        <p class="disclaimer">Capital: {{ amount() | number:'1.0-0' }} €. Interés simple del 1 % diario; los primeros 30 días no generan intereses para clientes nuevos. Ejemplo orientativo, sujeto a las condiciones de cada entidad.</p>
+      </div>
+      <a class="btn btn--solid btn--block" routerLink="/applications" [queryParams]="applicationParams()">Encontrar mi préstamo <span aria-hidden="true">→</span></a>
+    </section>
+  </div>
+
+  <section class="card term-section" aria-labelledby="term-table-title">
+    <div class="term-section__heading"><div><h2 id="term-table-title">Intereses según el plazo</h2><p>Para el importe elegido ({{ amount() | number:'1.0-0' }} €).</p></div><span class="badge">6 plazos</span></div>
+    <div class="table-scroll"><table><caption class="visually-hidden">Intereses y totales para seis plazos según el importe elegido</caption><thead><tr><th scope="col">Plazo</th><th scope="col">Intereses cliente nuevo</th><th scope="col">Intereses recurrente</th><th scope="col">Total cliente nuevo</th><th scope="col">Total recurrente</th></tr></thead><tbody>
+      @for (row of terms(); track row.termDays) {
+        <tr [class.selected-term]="row.termDays === termDays()"><th scope="row">{{ row.termDays }} días @if (row.termDays === termDays()) { <span class="badge">Tu plazo</span> }</th><td>{{ row.newCustomer.interest | number:'1.0-0' }} €</td><td>{{ row.returningCustomer.interest | number:'1.0-0' }} €</td><td>{{ row.newCustomer.total | number:'1.0-0' }} €</td><td>{{ row.returningCustomer.total | number:'1.0-0' }} €</td></tr>
+      }
+    </tbody></table></div>
+  </section>
+
+  <div class="info-grid">
+    <article class="card info-card"><span class="icon-chip" aria-hidden="true">%</span><h2>¿Qué es la TAE?</h2><p>La Tasa Anual Equivalente expresa el coste del préstamo en un año e incluye intereses y comisiones. Sirve para comparar préstamos de distinto plazo; revisa también el total a devolver.</p><span class="info-card__unavailable">Calculadora TAE →</span></article>
+    <article class="card info-card"><span class="icon-chip icon-chip--teal" aria-hidden="true">✓</span><h2>Consejos antes de pedir</h2><ul><li>Pide solo lo que puedas devolver en el plazo.</li><li>Compara el total a devolver, no solo la cuota.</li><li>Revisa las penalizaciones por retraso de cada entidad.</li></ul></article>
+  </div>
+  <p class="legal-note">Credara compara ofertas de entidades; no concede préstamos ni garantiza su aprobación. La simulación no es una oferta vinculante.</p>
+</main>

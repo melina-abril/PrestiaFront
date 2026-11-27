@@ -1,0 +1,41 @@
+<main class="types-page">
+  <nav class="breadcrumbs" aria-label="Migas de pan"><span>Inicio</span><span aria-hidden="true">/</span><span aria-current="page">Préstamos</span></nav>
+  <header class="types-page__heading">
+    <span class="eyebrow">GUÍAS DE PRÉSTAMOS · ESPAÑA</span>
+    <h1>Tipos de <span class="text-gradient">préstamo</span></h1>
+    <p class="lead">Elige el que se ajusta a tu situación y mira qué entidades lo ofrecen.</p>
+  </header>
+  @let state = typesState();
+  @switch (state.status) {
+    @case ('loading') {
+      <div class="types-grid" aria-label="Cargando tipos de préstamo" aria-busy="true">
+        @for (placeholder of placeholders; track placeholder) {
+          <div class="types-skeleton" aria-hidden="true"><span></span><span></span><span></span></div>
+        }
+      </div>
+      <span class="visually-hidden" role="status">Cargando tipos de préstamo…</span>
+    }
+    @case ('error') {
+      <app-error-alert message="No pudimos cargar los tipos de préstamo." retryLabel="Reintentar" (retry)="reload()" />
+    }
+    @case ('empty') {
+      <app-empty-state message="No hay tipos de préstamo disponibles en este momento." />
+    }
+    @case ('ready') {
+      @if (state.data.length === 0) {
+        <app-empty-state message="No hay tipos de préstamo disponibles en este momento." />
+      } @else {
+        <div class="types-grid">
+          @for (type of state.data; track type.slug) {
+            <a class="card card--glow type-card" [routerLink]="type.slug" [attr.aria-label]="'Consultar ' + type.title">
+              <span class="icon-chip" aria-hidden="true">{{ type.icon }}</span>
+              <h2 class="card__title">{{ type.title }}</h2>
+              <p>{{ type.summary }}</p>
+              <span class="type-card__action">Ver guía <span aria-hidden="true">→</span></span>
+            </a>
+          }
+        </div>
+      }
+    }
+  }
+</main>

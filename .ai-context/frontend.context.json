@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "layer": "frontend",
-  "kind": "structure",
-  "generatedAt": "2026-11-27T15:27:44.296Z",
+  "kind": "features",
+  "generatedAt": "2026-11-27T15:31:26.251Z",
   "system": {
     "uid": "Ki3EmRCSLkGwM3Tnlji0",
     "name": "Credara · Comparador de préstamos online"
@@ -19,8 +19,92 @@
     }
   ],
   "environment": [],
-  "modules": [],
-  "shared": [],
+  "modules": [
+    {
+      "moduleName": "lenders",
+      "title": "Inicio y comparador de entidades",
+      "featureKeys": [
+        "67edb12e-1b4f-4e83-865a-0d8b712487c1",
+        "a13a918c-de55-4974-8692-27eef72380bd"
+      ],
+      "services": [
+        {
+          "method": "GET",
+          "path": "/api/lenders",
+          "name": "listLenders",
+          "description": "Obtiene hasta tres entidades destacadas para el inicio o las entidades activas filtradas y ordenadas para el comparador, sin direcciones de afiliación."
+        }
+      ]
+    },
+    {
+      "moduleName": "loan-simulator",
+      "title": "Simulador avanzado de préstamos",
+      "featureKeys": [
+        "8f98d026-a93d-4a16-84ba-626054c8d919"
+      ],
+      "services": []
+    },
+    {
+      "moduleName": "loan-applications",
+      "title": "Solicitud y presentación de ofertas",
+      "featureKeys": [
+        "822a6f75-6c23-4e09-83ab-ad757c8118a9"
+      ],
+      "services": [
+        {
+          "method": "POST",
+          "path": "/api/applications",
+          "name": "createApplication",
+          "description": "Envía una solicitud validada con Idempotency-Key y recibe su identificador."
+        },
+        {
+          "method": "GET",
+          "path": "/api/applications/:id/offers",
+          "name": "getApplicationOffers",
+          "description": "Obtiene las ofertas calculadas para la solicitud, sin direcciones de afiliación."
+        },
+        {
+          "method": "POST",
+          "path": "/api/applications/:id/clicks",
+          "name": "recordOfferClick",
+          "description": "Registra el clic en una oferta y recibe entonces la URL de destino."
+        }
+      ]
+    },
+    {
+      "moduleName": "loan-types",
+      "title": "Tipos de préstamo",
+      "featureKeys": [
+        "98ad01a1-aa1d-4d92-8771-cacee72cd586"
+      ],
+      "services": [
+        {
+          "method": "GET",
+          "path": "/api/loan-types",
+          "name": "listLoanTypes",
+          "description": "Obtiene los tipos de préstamo activos para el índice."
+        },
+        {
+          "method": "GET",
+          "path": "/api/loan-types/:slug",
+          "name": "getLoanType",
+          "description": "Obtiene el contenido de un tipo, sus relacionados y las entidades que cumplen su criterio."
+        }
+      ]
+    }
+  ],
+  "shared": [
+    {
+      "path": "src/app/features/loan-simulator/shared/loan-calculation.ts",
+      "exportName": "calculateLoan",
+      "kind": "function"
+    },
+    {
+      "path": "src/app/features/loan-simulator/shared/loan-simulation-store.ts",
+      "exportName": "LoanSimulationStore",
+      "kind": "injectable-service"
+    }
+  ],
   "frontend": {
     "apiBaseUrls": [
       {
@@ -44,14 +128,57 @@
       }
     ],
     "useMock": true,
-    "consumedEndpoints": []
+    "consumedEndpoints": [
+      {
+        "moduleName": "lenders",
+        "method": "GET",
+        "path": "/api/lenders",
+        "name": "listLenders",
+        "description": "Obtiene hasta tres entidades destacadas para el inicio o las entidades activas filtradas y ordenadas para el comparador, sin direcciones de afiliación."
+      },
+      {
+        "moduleName": "loan-applications",
+        "method": "POST",
+        "path": "/api/applications",
+        "name": "createApplication",
+        "description": "Envía una solicitud validada con Idempotency-Key y recibe su identificador."
+      },
+      {
+        "moduleName": "loan-applications",
+        "method": "GET",
+        "path": "/api/applications/:id/offers",
+        "name": "getApplicationOffers",
+        "description": "Obtiene las ofertas calculadas para la solicitud, sin direcciones de afiliación."
+      },
+      {
+        "moduleName": "loan-applications",
+        "method": "POST",
+        "path": "/api/applications/:id/clicks",
+        "name": "recordOfferClick",
+        "description": "Registra el clic en una oferta y recibe entonces la URL de destino."
+      },
+      {
+        "moduleName": "loan-types",
+        "method": "GET",
+        "path": "/api/loan-types",
+        "name": "listLoanTypes",
+        "description": "Obtiene los tipos de préstamo activos para el índice."
+      },
+      {
+        "moduleName": "loan-types",
+        "method": "GET",
+        "path": "/api/loan-types/:slug",
+        "name": "getLoanType",
+        "description": "Obtiene el contenido de un tipo, sus relacionados y las entidades que cumplen su criterio."
+      }
+    ]
   },
   "relations": [
     "Backend: el front arma cada llamada con apiBaseUrl /api (src/environments/environment.backend.ts), /api (src/environments/environment.production.ts), /api (src/environments/environment.ts) + el path del servicio.",
     "Backend: en desarrollo el front redirige /api → http://localhost:8080: el backend tiene que levantar ahí.",
     "Backend: el front levanta en el puerto 4200: ese origen va en la configuración de CORS del backend.",
-    "Backend: el front todavía no consume endpoints.",
+    "Backend: el front consume 6 endpoints (frontend.consumedEndpoints); cualquier cambio de method, path o forma de los DTOs lo rompe.",
     "useMock está en true: el front todavía responde con datos mock."
   ],
-  "readme": "# Credara · Comparador de préstamos online\n\nFrontend público desarrollado con Angular 22. Esta estructura inicial muestra una página de bienvenida; los módulos de las funcionalidades se incorporarán después.\n\n## Desarrollo\n\nRequiere Node.js compatible con Angular 22.\n\n```sh\nnpm install\nnpm start\n```\n\n`npm start` utiliza la configuración de desarrollo con mocks. Para conectar el frontend con la API local, inicia el backend por separado y ejecuta:\n\n```sh\nnpm run start:backend\n```\n\nEl frontend escucha en `http://localhost:4200`. Su proxy envía las peticiones bajo `/api` al backend en `http://localhost:8080`; no accede directamente a Firestore. El backend usa el proyecto `demo-app` y el emulador de Firestore en `127.0.0.1:8085` durante el desarrollo. Consulta el README de la base de datos para iniciar y cargar ese emulador. Configura `FRONT_URL=http://localhost:4200` en el backend para permitir el origen del frontend.\n\n```sh\nnpm run build\n```\n\nLa compilación de producción utiliza `environment.production.ts`: desactiva los mocks y llama a la API bajo `/api` en el mismo origen. El despliegue debe dirigir ese prefijo al backend. No se requiere inicio de sesión.\n\n## Módulos\n\nTodavía no hay módulos de funcionalidades en esta estructura inicial.\n"
+  "readme": "# Credara · Comparador de préstamos online\n\nSitio público en Angular 22. No requiere cuenta ni inicio de sesión.\n\n## Desarrollo\n\nRequiere Node.js y npm compatibles con Angular 22.\n\n```sh\nnpm install\nnpm start\n```\n\n`npm start` sirve la aplicación con datos de ejemplo. Para conectarla a la API local, inicia primero el backend en el puerto `8080` y ejecuta:\n\n```sh\nnpm run start:backend\n```\n\nEl servidor de desarrollo usa el proxy de `/api` hacia `http://localhost:8080`. El frontend se sirve en `http://localhost:4200`; configura `FRONT_URL=http://localhost:4200` en el backend para permitir ese origen. Para compilar:\n\n```sh\nnpm run build\n```\n\nLa compilación de producción usa `environment.production.ts`: los mocks quedan desactivados y las peticiones se hacen al mismo origen bajo `/api`. En el despliegue, dirige ese prefijo al backend.\n\n## Módulos\n\n- `lenders`: inicio con ofertas destacadas y comparador de entidades.\n- `loan-simulator`: simulador avanzado, calculado en el navegador.\n- `applications`: solicitud y presentación de ofertas.\n- `loan-types`: índice y páginas de tipos de préstamo.\n\n## Conexión con las otras capas\n\nEl frontend consume los endpoints públicos del backend bajo `/api`: `/api/lenders`, `/api/applications` y `/api/loan-types`. El backend escucha en el puerto `8080` y utiliza Firestore; el frontend no accede directamente a la base. Para el desarrollo local de las tres capas, inicia el emulador de Firestore en `127.0.0.1:8085` con el proyecto `demo-app`, después el backend y por último `npm run start:backend`.\n"
 }

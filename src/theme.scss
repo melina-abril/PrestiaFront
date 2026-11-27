@@ -1,22 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
 
-/* La paleta y las clases de marca se incorporan en el bloque brand-style del proyecto. */
+/* El bloque de marca brand-style:start … brand-style:end aporta la paleta,
+   las fuentes y los componentes Aurora. Estos tokens adaptan los estilos
+   fijos de la arquitectura sin redefinir las variables de la marca. */
 :root {
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-600);
   --color-accent: var(--accent);
+  --color-bg: var(--background);
   --color-background: var(--background);
   --color-surface: var(--surface);
+  --color-surface-muted: var(--soft-background);
+  --color-border: var(--border);
   --color-text: var(--text-primary);
   --color-text-muted: var(--text-secondary);
-  --color-border: var(--border);
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-danger: var(--error);
+  --font-sans: var(--font-body);
   --space-xs: var(--space-1);
   --space-sm: var(--space-2);
   --space-md: var(--space-4);
   --space-lg: var(--space-5);
   --space-xl: var(--space-6);
+  --space-2xl: var(--space-7);
   --radius: var(--radius-md);
 }
 
@@ -563,7 +570,6 @@ img { max-width: 100%; display: block; }
 /* theme-tokens:start — variables del kit que el tema no definía (completadas al generar) */
 :root {
   --color-on-primary: #ffffff;
-  --color-surface-muted: var(--soft-background);
   --color-focus: var(--accent);
   --color-info: var(--primary);
   --color-info-surface: #efecfe;
